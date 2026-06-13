@@ -35,6 +35,60 @@ npm run dev
 
 ---
 
+## Показать сайт через ngrok (без VPS)
+
+Если нужно показать сайт другу или клиенту через интернет:
+
+```bash
+# 1. Установить ngrok
+# Скачайте с https://ngrok.com/download (Linux/Mac/Windows)
+# Или через npm:
+npm install -g ngrok
+
+# 2. Зарегистрируйтесь на https://ngrok.com (бесплатно)
+# Скопируйте токен из https://dashboard.ngrok.com/get-started/your-authtoken
+
+# 3. Настроить токен
+ngrok config add-authtoken ВАШ_ТОКЕН
+
+# 4. Запустить сайт (в первом терминале)
+npm run dev
+
+# 5. Запустить туннель (во втором терминале)
+ngrok http 3000
+```
+
+Выдаст ссылку вида `https://xxxx.ngrok-free.app` — дайте её клиенту.
+
+> **Примечание:** ngrok может не работать если фаервол блокирует порты. В этом случае используйте Cloudflare Tunnel:
+> ```bash
+> cloudflared tunnel --url http://localhost:3000
+> ```
+
+---
+
+## Доступ к приватному репозиторию для друга
+
+### Вариант 1: Добавить друга как Collaborator
+1. Зайдите на https://github.com/kiritobtwq/fatiha/settings/access
+2. Нажмите "Add people"
+3. Введите GitHub-username или email друга
+4. Выберите роль "Write" (или "Admin" для полного доступа)
+5. Друг получит приглашение на почту
+
+### Вариант 2: Дать логин и пароль
+Просто передайте другу:
+- Логин: `kiritobtwq`
+- Пароль от GitHub
+
+### Вариант 3: Скачать архив
+1. Зайдите на репозиторий
+2. Нажмите зелёную кнопку "<> Code"
+3. Выберите "Download ZIP"
+4. Передайте ZIP-файл другу
+
+---
+
 ## Админ-панель
 
 - **URL:** http://localhost:3000/alfatiha-secure-panel-2024x9k/login
