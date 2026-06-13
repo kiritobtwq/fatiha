@@ -1,0 +1,105 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model PrayerSchedule {
+  id      Int      @id @default(autoincrement())
+  date    DateTime @unique
+  fajr    String
+  dhuhr   String
+  asr     String
+  maghrib String
+  isha    String
+  juma    String
+}
+
+model Lesson {
+  id          Int      @id @default(autoincrement())
+  title       String
+  group       String   // "Общая детская", "Мужская", "Женская"
+  days        String[] // ["Пн", "Вт", ...]
+  startTime   String
+  endTime     String
+  createdAt   DateTime @default(now())
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+}
+
+model GalleryImage {
+  id          Int      @id @default(autoincrement())
+  url         String
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model Event {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String
+  date        DateTime
+  createdAt   DateTime @default(now())
+}
+
+model Donation {
+  id                 Int      @id @default(autoincrement())
+  amount             Float
+  donorName          String
+  donorEmail         String
+  status             String   // 'pending', 'succeeded', 'canceled'
+  yookassaPaymentId  String?  @unique
+  isRecurring        Boolean  @default(false)
+  recurringPeriod    String?  // "monthly", "friday", "daily"
+  createdAt          DateTime @default(now())
+}
+
+model WebhookLog {
+  id         Int      @id @default(autoincrement())
+  payload    Json
+  receivedAt DateTime @default(now())
+}
+
+model AdminUser {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model AdminLog {
+  id        String   @id @default(cuid())
+  adminId   Int
+  action    String
+  details   String?
+  ip        String?
+  createdAt DateTime @default(now())
+}
+
+model ContactRequest {
+  id        String   @id @default(cuid())
+  name      String
+  contact   String
+  subject   String?
+  message   String
+  status    String   @default("new") // "new", "archived"
+  createdAt DateTime @default(now())
+}
+
+model Content {
+  id        String   @id @default(cuid())
+  key       String   @unique // e.g., "hero_title", "about_text"
+  value     String   // text content
+  imageUrl  String?  // for images
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+}
