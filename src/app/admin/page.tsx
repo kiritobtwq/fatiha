@@ -16,11 +16,13 @@ import {
   XCircle,
   Clock,
   Settings,
+  ImageIcon,
 } from 'lucide-react';
 import ScheduleManagement from '@/components/admin/ScheduleManagement';
 import ServicesManagement from '@/components/admin/ServicesManagement';
 import LessonsManagement from '@/components/admin/LessonsManagement';
 import EventsManagement from '@/components/admin/EventsManagement';
+import GalleryManagement from '@/components/admin/GalleryManagement';
 import SettingsManagement from '@/components/admin/SettingsManagement';
 
 interface Stats {
@@ -82,6 +84,7 @@ export default function AdminDashboardPage() {
   const [services, setServices] = useState<Service[]>([]);
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [events, setEvents] = useState<Event[]>([]);
+  const [gallery, setGallery] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -91,13 +94,14 @@ export default function AdminDashboardPage() {
   const loadData = async () => {
     setIsLoading(true);
     try {
-      const [statsRes, donationsRes, contactsRes, servicesRes, lessonsRes, eventsRes] = await Promise.all([
+      const [statsRes, donationsRes, contactsRes, servicesRes, lessonsRes, eventsRes, galleryRes] = await Promise.all([
         fetch('/api/stats'),
         fetch('/api/donations?limit=50&offset=0'),
         fetch('/api/contact'),
         fetch('/api/admin/services'),
         fetch('/api/admin/lessons'),
         fetch('/api/events'),
+        fetch('/api/admin/gallery'),
       ]);
 
       const statsData = await statsRes.json();
@@ -106,6 +110,7 @@ export default function AdminDashboardPage() {
       const servicesData = await servicesRes.json();
       const lessonsData = await lessonsRes.json();
       const eventsData = await eventsRes.json();
+      const galleryData = await galleryRes.json();
 
       setStats({
         totalRaised: statsData.totalRaised || 0,
@@ -119,11 +124,13 @@ export default function AdminDashboardPage() {
       setServices(Array.isArray(servicesData) ? servicesData : []);
       setLessons(Array.isArray(lessonsData) ? lessonsData : []);
       setEvents(Array.isArray(eventsData) ? eventsData : []);
+      setGallery(Array.isArray(galleryData) ? galleryData : []);
     } catch (error) {
       console.error('Error loading admin data:', error);
       setServices([]);
       setLessons([]);
       setEvents([]);
+      setGallery([]);
     } finally {
       setIsLoading(false);
     }
@@ -201,6 +208,7 @@ export default function AdminDashboardPage() {
     { id: 'education', icon: BookOpen, label: 'Расписание уроков' },
     { id: 'services', icon: Briefcase, label: 'Услуги' },
     { id: 'events', icon: Calendar, label: 'События' },
+    { id: 'gallery', icon: ImageIcon, label: 'Галерея' },
     { id: 'contacts', icon: MessagesSquare, label: 'Заявки' },
     { id: 'settings', icon: Settings, label: 'Настройки' },
   ];
@@ -459,6 +467,10 @@ export default function AdminDashboardPage() {
 
             {activeTab === 'events' && (
               <EventsManagement events={events} setEvents={setEvents} loadData={loadData} />
+            )}
+
+            {activeTab === 'gallery' && (
+              <GalleryManagement gallery={gallery} setGallery={setGallery} loadData={loadData} />
             )}
 
             {activeTab === 'settings' && (

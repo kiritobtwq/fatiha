@@ -11,6 +11,7 @@ import {
   ArrowRight,
   ChevronRight,
   XCircle,
+  X,
   ShieldCheck,
   RefreshCw,
   Calendar,
@@ -45,6 +46,12 @@ interface Stats {
   progressPercent: number;
 }
 
+const galleryPhotos = [
+  { src: '/media/Главный_план.jpg', alt: 'Главный план мечети' },
+  { src: '/media/Доп_фотка_помещение.jpg', alt: 'Помещение мечети' },
+  { src: '/media/Доп_фотка2_помещение.jpg', alt: 'Интерьер мечети' },
+];
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [schedule, setSchedule] = useState<PrayerSchedule | null>(null);
@@ -61,12 +68,16 @@ export default function Home() {
   const [amount, setAmount] = useState('500');
   const [customAmount, setCustomAmount] = useState('');
   const [isCustomMode, setIsCustomMode] = useState(false);
+  const [lightboxPhoto, setLightboxPhoto] = useState<{ src: string; alt: string } | null>(null);
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [donorEmail, setDonorEmail] = useState('');
   const [widgetError, setWidgetError] = useState('');
   const [consentGiven, setConsentGiven] = useState(false);
   const [showRecurringConfirm, setShowRecurringConfirm] = useState(false);
+
+  // Carousel state
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const fallbackStats: Stats = {
     totalRaised: 0,
@@ -193,6 +204,14 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [schedule]);
 
+  useEffect(() => {
+    if (galleryPhotos.length <= 3) return;
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % galleryPhotos.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [galleryPhotos.length]);
+
   const getTimeAgo = (dateString: string) => {
     const date = new Date(dateString);
     const now = new Date();
@@ -267,191 +286,182 @@ export default function Home() {
   const displaySchedule = schedule || fallbackSchedule;
 
   return (
-    <div className="flex flex-col gap-16 py-0">
+    <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative min-h-[600px] md:min-h-[700px] lg:h-[85vh] flex items-center overflow-hidden font-sans">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/media/Главный_план.jpg"
-            alt="Мечеть Фатиха"
-            fill
-            className="object-cover"
-            priority
-          />
-          <div className="absolute inset-0 bg-black/50 z-10"></div>
-        </div>
+      <section className="px-3 md:px-6 lg:px-8 pt-4">
+        <div className="relative min-h-[400px] md:min-h-[500px] lg:h-[75vh] flex items-end lg:items-center overflow-hidden rounded-[24px] lg:rounded-[32px]">
+          <div className="absolute inset-0 z-0">
+            <Image src="/media/Главный_план.jpg" alt="Мечеть Фатиха" fill className="object-cover object-center" priority />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 lg:bg-gradient-to-r lg:from-black/60 lg:via-black/20 lg:to-transparent z-10" />
+          </div>
 
-        <div className="container mx-auto px-4 z-20 relative pt-20 pb-12">
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 items-stretch lg:items-center">
-            {/* Left Content */}
-            <div className="flex-1 flex flex-col justify-between py-4 min-h-[450px]">
-              <div className="space-y-6">
-                <h1 className="font-black text-4xl md:text-5xl lg:text-6xl text-white leading-[1.1]">
-                  Соборная мечеть <br /> г. Бирск
-                </h1>
-                <p className="text-white/90 text-lg md:text-xl font-medium">
-                  Сбор на реконструкцию мечети
-                </p>
-              </div>
+        {/* Desktop: text left + widget right overlaid on photo */}
+        <div className="relative z-20 w-full hidden lg:block">
+          <div className="container mx-auto px-8">
+            <div className="flex gap-12 items-center">
+              {/* Left: text + stats */}
+              <div className="flex-1 space-y-5">
+                <p className="text-[#2ECC8E] text-xs font-black uppercase tracking-[0.2em]">Сбор на реконструкцию</p>
+                <h1 className="font-black text-5xl xl:text-6xl text-white leading-[1.05]">Мечеть Фатиха</h1>
+                <p className="text-white/70 text-base font-medium">г. Бирск, ул. Мира, 1</p>
 
-              <div className="space-y-6 mt-auto">
-                <div className="flex items-center gap-3 flex-wrap">
-                  <div className="flex items-center bg-[#2ECC8E]/90 backdrop-blur-sm rounded-full pl-1 pr-5 py-1">
-                    <span className="bg-white text-[#2ECC8E] px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-wider">Цель</span>
-                    <span className="text-white text-lg font-black ml-3" suppressHydrationWarning>{formatNumber(displayStats.goal)} ₽</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[#2ECC8E] text-lg font-black">{formatNumber(displayStats.remaining)} ₽</span>
-                    <span className="text-white/60 text-[10px] font-bold uppercase leading-tight">осталось<br/>собрать</span>
-                  </div>
+                <div className="flex items-center gap-3">
+                  <span className="bg-[#2ECC8E] text-white text-sm font-black px-4 py-1.5 rounded-full" suppressHydrationWarning>{formatNumber(Math.floor(displayStats.totalRaised))} ₽</span>
+                  <span className="text-white/60 text-xs font-bold">из {formatNumber(displayStats.goal)} ₽</span>
+                  <span className="text-[#2ECC8E] text-xs font-black" suppressHydrationWarning>{displayStats.progressPercent}%</span>
                 </div>
 
-                <div className="w-full h-3 bg-white/20 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-[#00D5B7] to-[#00D34E] rounded-full transition-all duration-1000" style={{ width: `${Math.max(displayStats.progressPercent, 2)}%` }}></div>
+                <div className="w-full max-w-lg h-2.5 bg-white/20 rounded-full overflow-hidden">
+                  <div className="h-full bg-gradient-to-r from-[#00D5B7] to-[#00D34E] rounded-full transition-all duration-1000" style={{ width: `${Math.max(displayStats.progressPercent, 2)}%` }} />
                 </div>
 
-                <div className="flex items-end justify-between">
+                <div className="flex items-center gap-8">
                   <div>
-                    <div className="text-[#2ECC8E] text-3xl font-black" suppressHydrationWarning>{formatNumber(Math.floor(displayStats.totalRaised))} ₽</div>
-                    <div className="text-white/50 text-[10px] font-black uppercase tracking-widest">Собрали</div>
-                    <div className="text-white/40 text-[9px] font-bold mt-1" suppressHydrationWarning>{displayStats.donorCount} {getDonorWord(displayStats.donorCount)}</div>
+                    <div className="text-white text-xl font-black" suppressHydrationWarning>{displayStats.donorCount} {getDonorWord(displayStats.donorCount)}</div>
+                    <div className="text-white/50 text-[10px] font-bold uppercase tracking-wider">Поддерживают</div>
                   </div>
-                  <div className="text-center">
-                    <div className="inline-block bg-white/20 backdrop-blur-sm text-white text-sm font-black px-4 py-1.5 rounded-full" suppressHydrationWarning>{displayStats.progressPercent}%</div>
-                    <div className="text-white/50 text-[10px] font-black uppercase tracking-widest mt-1">Осталось {formatNumber(Math.floor(displayStats.remaining))} ₽</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-white text-3xl font-black" suppressHydrationWarning>{formatNumber(Math.floor(displayStats.goal))} ₽</div>
-                    <div className="text-white/50 text-[10px] font-black uppercase tracking-widest">Необходимо</div>
+                  <div className="w-px h-8 bg-white/20" />
+                  <div>
+                    <div className="text-white text-xl font-black" suppressHydrationWarning>{formatNumber(Math.floor(displayStats.remaining))} ₽</div>
+                    <div className="text-white/50 text-[10px] font-bold uppercase tracking-wider">Осталось собрать</div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-6 pt-4">
-                  <button
-                    onClick={() => {
-                      const url = window.location.href;
-                      const text = 'Мечеть Фатиха — сбор на реконструкцию в г. Бирске. Помогите построить мечеть!';
-                      if (navigator.share) {
-                        navigator.share({ title: 'Мечеть Фатиха — Бирск', text, url });
-                      } else {
-                        navigator.clipboard.writeText(`${text}\n${url}`);
-                        alert('Ссылка скопирована!');
-                      }
-                    }}
-                    className="flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-2.5 py-1.5 rounded-full border border-white/10 hover:bg-white/20 transition-colors cursor-pointer"
-                  >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M16 6l-4-4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 2v13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
-                    <span className="text-white text-[10px] font-black">Поделиться</span>
-                  </button>
-                  <p className="text-white/80 text-[11px] font-bold leading-relaxed max-w-[240px]">
-                    Любое ваше участие — это не просто перевод или клик. Это вера в то, что мы одна умма!
-                  </p>
-                </div>
+                <button onClick={() => { const url = window.location.href; const text = 'Мечеть Фатиха — сбор на реконструкцию в г. Бирске. Помогите построить мечеть!'; if (navigator.share) { navigator.share({ title: 'Мечеть Фатиха — Бирск', text, url }); } else { navigator.clipboard.writeText(`${text}\n${url}`); alert('Ссылка скопирована!'); } }} className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md px-4 py-2.5 rounded-full border border-white/10 hover:bg-white/20 transition-colors cursor-pointer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M16 6l-4-4-4 4" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 2v13" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  <span className="text-white text-xs font-black">Поделиться</span>
+                </button>
               </div>
-            </div>
 
-            {/* Right Donation Widget */}
-            <div className="flex-none w-full lg:w-[460px]" id="donation-widget">
-              <div className="bg-white rounded-[32px] p-6 lg:p-8 shadow-2xl space-y-5">
-                <h2 className="text-2xl font-black text-[#1A1A1A]">Помочь сейчас</h2>
-
-                <div className="flex bg-[#F2F2F7] p-1 rounded-2xl">
-                  <button onClick={() => setIsRecurring(false)} className={`flex-1 py-3 rounded-[14px] text-xs font-black transition-all ${!isRecurring ? 'bg-[#1C1C1E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Единоразово</button>
-                  <button onClick={() => setIsRecurring(true)} className={`flex-1 py-3 rounded-[14px] text-xs font-black transition-all ${isRecurring ? 'bg-[#2ECC8E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Регулярно</button>
-                </div>
-
-                <div className="space-y-3">
-                  <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-11 px-5 bg-white border border-[#E5E5EA] rounded-[22px] font-medium text-[#1A1A1A] focus:outline-none focus:border-[#2ECC8E] transition-all disabled:bg-[#F2F2F7] disabled:text-[#8E8E93] text-sm" />
-                  <button onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-10 rounded-xl border text-xs font-bold transition-all ${isAnonymous ? 'bg-[#2ECC8E] border-[#2ECC8E] text-white' : 'border-[#E5E5EA] text-[#8E8E93] hover:border-[#C7C7CC]'}`}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
-
-                  <div className="space-y-3 border-b border-[#F2F2F7] pb-3">
-                    <div className="flex items-baseline gap-1.5">
+              {/* Right: widget overlaid on photo */}
+              <div className="flex-none w-[420px] xl:w-[460px]" id="donation-widget">
+                <div className="bg-white rounded-[28px] p-7 shadow-2xl">
+                  <h2 className="text-2xl font-black text-[#1A1A1A] mb-5">Помочь сейчас</h2>
+                  <div className="flex bg-[#F2F2F7] p-1 rounded-2xl mb-5">
+                    <button onClick={() => setIsRecurring(false)} className={`flex-1 py-3 rounded-[14px] text-sm font-black transition-all ${!isRecurring ? 'bg-[#1C1C1E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Единоразово</button>
+                    <button onClick={() => setIsRecurring(true)} className={`flex-1 py-3 rounded-[14px] text-sm font-black transition-all ${isRecurring ? 'bg-[#2ECC8E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Регулярно</button>
+                  </div>
+                  <div className="space-y-3 mb-4">
+                    <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-12 px-5 bg-white border border-[#E5E5EA] rounded-[22px] font-medium text-[#1A1A1A] focus:outline-none focus:border-[#2ECC8E] transition-all disabled:bg-[#F2F2F7] disabled:text-[#8E8E93] text-base" />
+                    <button onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-11 rounded-xl border text-sm font-bold transition-all ${isAnonymous ? 'bg-[#2ECC8E] border-[#2ECC8E] text-white' : 'border-[#E5E5EA] text-[#8E8E93] hover:border-[#C7C7CC]'}`}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
+                  </div>
+                  <div className="space-y-3 border-b border-[#F2F2F7] pb-4 mb-4">
+                    <div className="flex items-baseline gap-2">
                       {isCustomMode ? (
-                        <input
-                          type="text"
-                          inputMode="numeric"
-                          pattern="[0-9]*"
-                          value={customAmount}
-                          onChange={(e) => {
-                            const v = e.target.value.replace(/[^0-9]/g, '');
-                            setCustomAmount(v);
-                            setAmount(v);
-                          }}
-                          autoFocus
-                          placeholder="0"
-                          className="text-3xl md:text-4xl font-black text-[#1A1A1A] bg-transparent border-none outline-none w-32 md:w-40 placeholder:text-[#C7C7CC]"
-                        />
+                        <input type="text" inputMode="numeric" pattern="[0-9]*" value={customAmount} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setCustomAmount(v); setAmount(v); }} autoFocus placeholder="0" className="text-4xl font-black text-[#1A1A1A] bg-transparent border-none outline-none w-40 placeholder:text-[#C7C7CC]" />
                       ) : (
-                        <span className="text-3xl md:text-4xl font-black text-[#1A1A1A]">{amount}</span>
+                        <span className="text-4xl font-black text-[#1A1A1A]">{amount}</span>
                       )}
-                      <span className="text-xl md:text-2xl font-black text-[#C7C7CC]">₽</span>
+                      <span className="text-2xl font-black text-[#C7C7CC]">₽</span>
                     </div>
-                    <div className="flex gap-1.5 flex-wrap">
+                    <div className="flex gap-2 flex-wrap">
                       {['500', '1000', '3000'].map((amt) => (
-                        <button
-                          key={amt}
-                          onClick={() => { setAmount(amt); setCustomAmount(amt); setIsCustomMode(false); }}
-                          className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${
-                            !isCustomMode && amount === amt ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-[#E5E5EA]'
-                          }`}
-                        >
-                          {amt} ₽
-                        </button>
+                        <button key={amt} onClick={() => { setAmount(amt); setCustomAmount(amt); setIsCustomMode(false); }} className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${!isCustomMode && amount === amt ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-[#E5E5EA]'}`}>{amt} ₽</button>
                       ))}
-                      <button
-                        onClick={() => { setIsCustomMode(true); setCustomAmount(''); }}
-                        className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${
-                          isCustomMode ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-[#E5E5EA]'
-                        }`}
-                      >
-                        Своя
-                      </button>
+                      <button onClick={() => { setIsCustomMode(true); setCustomAmount(''); }} className={`px-4 py-2 rounded-xl text-xs font-black transition-all ${isCustomMode ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-[#E5E5EA]'}`}>Своя</button>
                     </div>
                   </div>
-                </div>
-
-                <div className="space-y-4">
-                  <button type="button" onClick={() => setConsentGiven(!consentGiven)} className={`w-full flex items-center gap-3 p-4 rounded-2xl border-2 transition-all text-left ${consentGiven ? 'border-[#2ECC8E] bg-[#F2FBF7]' : 'border-[#E5E5EA] hover:border-[#C7C7CC]'}`}>
-                    <div className={`w-6 h-6 rounded-lg border-2 shrink-0 flex items-center justify-center transition-colors ${consentGiven ? 'bg-[#2ECC8E] border-[#2ECC8E]' : 'border-[#C7C7CC]'}`}>
-                      {consentGiven && <CheckCircle size={14} className="text-white" />}
-                    </div>
-                    <span className="text-sm font-medium text-[#6B6B6B]">Я даю согласие на обработку персональных данных и <Link href="/public-offer" className="text-[#2ECC8E] font-bold hover:underline">условия оферты</Link></span>
+                  <button type="button" onClick={() => setConsentGiven(!consentGiven)} className={`w-full flex items-center gap-3 p-3 rounded-2xl border-2 transition-all text-left mb-4 ${consentGiven ? 'border-[#2ECC8E] bg-[#F2FBF7]' : 'border-[#E5E5EA]'}`}>
+                    <div className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center transition-colors ${consentGiven ? 'bg-[#2ECC8E] border-[#2ECC8E]' : 'border-[#C7C7CC]'}`}>{consentGiven && <CheckCircle size={12} className="text-white" />}</div>
+                    <span className="text-xs font-medium text-[#6B6B6B]">Согласие на обработку данных и <Link href="/public-offer" className="text-[#2ECC8E] font-bold hover:underline">условия оферты</Link></span>
                   </button>
-
-                  {widgetError && <div className="p-3 bg-red-50 text-red-600 text-sm font-bold rounded-xl text-center">{widgetError}</div>}
-
+                  {widgetError && <div className="p-3 bg-red-50 text-red-600 text-sm font-bold rounded-xl text-center mb-4">{widgetError}</div>}
                   <button onClick={handleDonateSubmit} disabled={isSubmitting} className="w-full h-14 bg-gradient-to-r from-[#2ECC8E] to-[#1FA870] text-white rounded-[20px] text-base font-black shadow-xl shadow-emerald-100 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:scale-100">
                     {isSubmitting ? 'Обработка...' : 'Поддержать мечеть'}
                   </button>
                 </div>
-
-                {showRecurringConfirm && (
-                  <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-                    <div className="bg-white p-8 rounded-2xl shadow-2xl max-w-md w-full space-y-6">
-                      <h3 className="font-display font-bold text-2xl text-[#1C1C1E]">Подтверждение регулярного платежа</h3>
-                      <p className="text-[#6B6B6B]">Сумма <span className="font-bold text-[#1C1C1E]">{customAmount || amount} ₽</span> будет списываться автоматически каждый месяц.</p>
-                      <div className="flex gap-4">
-                        <button onClick={() => setShowRecurringConfirm(false)} className="flex-1 px-6 py-3 bg-[#F2F2F7] text-[#1C1C1E] rounded-xl font-bold hover:bg-[#E5E5EA] transition-colors">Отмена</button>
-                        <button onClick={() => { setShowRecurringConfirm(false); handleDonateSubmit({ preventDefault: () => {} } as React.FormEvent); }} className="flex-1 px-6 py-3 bg-[#2ECC8E] text-white rounded-xl font-bold hover:bg-[#1FA870] transition-colors">Подтвердить</button>
-                      </div>
-                    </div>
-                  </div>
-                )}
               </div>
             </div>
           </div>
         </div>
+
+        {/* Mobile: text only */}
+        <div className="relative z-20 w-full lg:hidden px-4 pb-6 pt-24">
+          <div className="space-y-4">
+            <p className="text-[#2ECC8E] text-[10px] font-black uppercase tracking-[0.2em]">Сбор на реконструкцию</p>
+            <h1 className="font-black text-3xl text-white leading-[1.05]">Мечеть Фатиха</h1>
+            <p className="text-white/70 text-sm font-medium">г. Бирск, ул. Мира, 1</p>
+            <div className="flex items-center gap-2">
+              <span className="bg-[#2ECC8E] text-white text-xs font-black px-3 py-1 rounded-full" suppressHydrationWarning>{formatNumber(Math.floor(displayStats.totalRaised))} ₽</span>
+              <span className="text-white/60 text-[10px] font-bold">из {formatNumber(displayStats.goal)} ₽</span>
+              <span className="text-[#2ECC8E] text-[10px] font-black" suppressHydrationWarning>{displayStats.progressPercent}%</span>
+            </div>
+            <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
+              <div className="h-full bg-gradient-to-r from-[#00D5B7] to-[#00D34E] rounded-full transition-all duration-1000" style={{ width: `${Math.max(displayStats.progressPercent, 2)}%` }} />
+            </div>
+            <div className="flex items-center gap-6">
+              <div>
+                <div className="text-white text-lg font-black" suppressHydrationWarning>{displayStats.donorCount} {getDonorWord(displayStats.donorCount)}</div>
+                <div className="text-white/50 text-[9px] font-bold uppercase tracking-wider">Поддерживают</div>
+              </div>
+              <div>
+                <div className="text-white text-lg font-black" suppressHydrationWarning>{formatNumber(Math.floor(displayStats.remaining))} ₽</div>
+                <div className="text-white/50 text-[9px] font-bold uppercase tracking-wider">Осталось</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </section>
+      <section className="lg:hidden container mx-auto px-4 -mt-4 relative z-30">
+        <div id="donation-widget" className="bg-white rounded-[24px] p-5 shadow-xl">
+          <h2 className="text-xl font-black text-[#1A1A1A] mb-4">Помочь сейчас</h2>
+          <div className="flex bg-[#F2F2F7] p-1 rounded-2xl mb-4">
+            <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-[14px] text-xs font-black transition-all ${!isRecurring ? 'bg-[#1C1C1E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Единоразово</button>
+            <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-[14px] text-xs font-black transition-all ${isRecurring ? 'bg-[#2ECC8E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Регулярно</button>
+          </div>
+          <div className="space-y-3 mb-4">
+            <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-11 px-5 bg-white border border-[#E5E5EA] rounded-[22px] font-medium text-[#1A1A1A] focus:outline-none focus:border-[#2ECC8E] transition-all disabled:bg-[#F2F2F7] disabled:text-[#8E8E93] text-sm" />
+            <button onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-10 rounded-xl border text-xs font-bold transition-all ${isAnonymous ? 'bg-[#2ECC8E] border-[#2ECC8E] text-white' : 'border-[#E5E5EA] text-[#8E8E93]'}`}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
+          </div>
+          <div className="space-y-3 border-b border-[#F2F2F7] pb-3 mb-4">
+            <div className="flex items-baseline gap-1.5">
+              {isCustomMode ? (
+                <input type="text" inputMode="numeric" pattern="[0-9]*" value={customAmount} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setCustomAmount(v); setAmount(v); }} autoFocus placeholder="0" className="text-3xl font-black text-[#1A1A1A] bg-transparent border-none outline-none w-32 placeholder:text-[#C7C7CC]" />
+              ) : (
+                <span className="text-3xl font-black text-[#1A1A1A]">{amount}</span>
+              )}
+              <span className="text-xl font-black text-[#C7C7CC]">₽</span>
+            </div>
+            <div className="flex gap-1.5 flex-wrap">
+              {['500', '1000', '3000'].map((amt) => (
+                <button key={amt} onClick={() => { setAmount(amt); setCustomAmount(amt); setIsCustomMode(false); }} className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${!isCustomMode && amount === amt ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93]'}`}>{amt} ₽</button>
+              ))}
+              <button onClick={() => { setIsCustomMode(true); setCustomAmount(''); }} className={`px-3 py-1.5 rounded-xl text-[10px] font-black transition-all ${isCustomMode ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93]'}`}>Своя</button>
+            </div>
+          </div>
+          <button type="button" onClick={() => setConsentGiven(!consentGiven)} className={`w-full flex items-center gap-3 p-3 rounded-2xl border-2 transition-all text-left mb-4 ${consentGiven ? 'border-[#2ECC8E] bg-[#F2FBF7]' : 'border-[#E5E5EA]'}`}>
+            <div className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center transition-colors ${consentGiven ? 'bg-[#2ECC8E] border-[#2ECC8E]' : 'border-[#C7C7CC]'}`}>{consentGiven && <CheckCircle size={12} className="text-white" />}</div>
+            <span className="text-xs font-medium text-[#6B6B6B]">Согласие и <Link href="/public-offer" className="text-[#2ECC8E] font-bold hover:underline">условия оферты</Link></span>
+          </button>
+          {widgetError && <div className="p-3 bg-red-50 text-red-600 text-sm font-bold rounded-xl text-center mb-4">{widgetError}</div>}
+          <button onClick={handleDonateSubmit} disabled={isSubmitting} className="w-full h-12 bg-gradient-to-r from-[#2ECC8E] to-[#1FA870] text-white rounded-[18px] text-sm font-black shadow-xl shadow-emerald-100 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:scale-100">
+            {isSubmitting ? 'Обработка...' : 'Поддержать мечеть'}
+          </button>
+          {showRecurringConfirm && (
+            <div className="fixed inset-0 z-[300] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+              <div className="bg-white p-6 rounded-2xl shadow-2xl max-w-sm w-full space-y-4">
+                <h3 className="font-bold text-lg text-[#1C1C1E]">Подтверждение</h3>
+                <p className="text-[#6B6B6B] text-sm">Сумма <span className="font-bold text-[#1C1C1E]">{customAmount || amount} ₽</span> будет списываться каждый месяц.</p>
+                <div className="flex gap-3">
+                  <button onClick={() => setShowRecurringConfirm(false)} className="flex-1 px-4 py-2.5 bg-[#F2F2F7] text-[#1C1C1E] rounded-xl font-bold text-sm hover:bg-[#E5E5EA] transition-colors">Отмена</button>
+                  <button onClick={() => { setShowRecurringConfirm(false); handleDonateSubmit({ preventDefault: () => {} } as React.FormEvent); }} className="flex-1 px-4 py-2.5 bg-[#2ECC8E] text-white rounded-xl font-bold text-sm hover:bg-[#1FA870] transition-colors">Подтвердить</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </section>
 
       {/* About Section */}
-      <section className="bg-white py-10">
+      <section className="bg-white py-8">
         <div className="container mx-auto px-4 max-w-4xl">
-          <h2 className="font-black text-2xl md:text-3xl text-[#1A1A1A] mb-6 text-center">О мечети</h2>
-          <div className="space-y-4 text-[#1A1A1A] text-sm md:text-base leading-relaxed font-medium text-center md:text-left">
+          <h2 className="font-black text-2xl md:text-3xl text-[#1A1A1A] mb-5 text-center">О мечети</h2>
+          <div className="space-y-3 text-[#1A1A1A] text-sm md:text-base leading-relaxed font-medium text-center md:text-left">
             <p className="text-base font-bold">Ассаляму алейкум ва рахматуллахи ва баракатух.</p>
             <p>Мечеть Фатиха в г. Бирске продолжает сбор средств для расширения и реконструкции мечети, расположенной по адресу, ул. Мира, 1.</p>
             <p>Просим вас ради довольства Аллаха, оказывать посильную материальную помощь и делится данной информацией в социальных сетях.</p>
-            <div className="bg-[#F2F2F7] p-6 rounded-2xl space-y-4">
+            <div className="bg-[#F2F2F7] p-5 rounded-2xl space-y-3">
               <p className="text-2xl font-bold text-center leading-loose">يَا أَيُّهَا الَّذِينَ آمَنُوا إِن تَنصُرُوا اللَّهَ يَنصُرْكُمْ وَيُثَبِّتْ أَقْدَامَكُمْ</p>
               <p className="text-center font-bold text-sm">&quot;О те, которые уверовали! Если вы поможете Аллаху, то и Он поможет вам и утвердит ваши стопы.&quot;</p>
             </div>
@@ -463,13 +473,141 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Gallery - Auto-sliding carousel */}
+      <section className="container mx-auto px-4 py-6">
+        <h2 className="font-bold text-xl md:text-2xl text-[#1C1C1E] mb-4 text-center">Фотографии мечети</h2>
+        {/* Desktop */}
+        <div className="hidden md:block relative overflow-hidden rounded-xl">
+          {galleryPhotos.length <= 3 ? (
+            <div className="flex gap-3">
+              {galleryPhotos.map((photo, i) => (
+                <div key={i} className="flex-1 aspect-[16/10] relative rounded-xl overflow-hidden group cursor-pointer" onClick={() => setLightboxPhoto(photo)}>
+                  <Image src={photo.src} alt={photo.alt} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="flex gap-3 transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * (100 / 3 + 1.1)}%)` }}>
+                {galleryPhotos.map((photo, i) => (
+                  <div key={i} className="min-w-[calc(33.333%-8px)] aspect-[16/10] relative rounded-xl overflow-hidden group cursor-pointer" onClick={() => setLightboxPhoto(photo)}>
+                    <Image src={photo.src} alt={photo.alt} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
+                  </div>
+                ))}
+              </div>
+              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                {Array.from({ length: Math.ceil(galleryPhotos.length / 3) }).map((_, i) => (
+                  <button key={i} onClick={() => setCurrentSlide(i * 3)} className={`w-2 h-2 rounded-full transition-all ${Math.floor(currentSlide / 3) === i ? 'bg-white w-4' : 'bg-white/50'}`} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        {/* Mobile */}
+        <div className="md:hidden relative overflow-hidden rounded-xl aspect-[16/10]" onClick={() => setLightboxPhoto(galleryPhotos[currentSlide % galleryPhotos.length])}>
+          {galleryPhotos.length <= 1 ? (
+            <div className="w-full h-full relative">
+              <Image src={galleryPhotos[0].src} alt={galleryPhotos[0].alt} fill className="object-cover" />
+            </div>
+          ) : (
+            <>
+              <div className="flex transition-transform duration-500 ease-in-out h-full" style={{ transform: `translateX(-${(currentSlide % galleryPhotos.length) * 100}%)` }}>
+                {galleryPhotos.map((photo, i) => (
+                  <div key={i} className="min-w-full h-full relative">
+                    <Image src={photo.src} alt={photo.alt} fill className="object-cover" />
+                  </div>
+                ))}
+              </div>
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+                {galleryPhotos.map((_, i) => (
+                  <button key={i} className={`w-1.5 h-1.5 rounded-full ${(currentSlide % galleryPhotos.length) === i ? 'bg-white w-4' : 'bg-white/50'}`} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+        {/* Lightbox */}
+        {lightboxPhoto && (
+          <div className="fixed inset-0 z-[500] bg-black/90 flex items-center justify-center p-4 cursor-pointer" onClick={() => setLightboxPhoto(null)}>
+            <div className="relative max-w-4xl max-h-[90vh] w-full h-full">
+              <Image src={lightboxPhoto.src} alt={lightboxPhoto.alt} fill className="object-contain" />
+            </div>
+            <button className="absolute top-4 right-4 text-white/70 hover:text-white" onClick={() => setLightboxPhoto(null)}>
+              <X size={32} />
+            </button>
+          </div>
+        )}
+      </section>
+
+      {/* Prayer Times - Clean card with icons */}
+      <section className="container mx-auto px-4 py-6">
+        <div className="max-w-4xl mx-auto bg-white rounded-2xl p-5 md:p-6 shadow-sm border border-[#F2F2F7]">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3 mb-5">
+            <div className="text-center md:text-left">
+              <h3 className="font-black text-lg text-[#1A1A1A] mb-0.5">Время намаза</h3>
+              <p className="text-[#8E8E93] font-bold uppercase text-[9px] tracking-widest">{format(new Date(), 'EEEE, d MMMM', { locale: ru })}</p>
+            </div>
+            {nextPrayer && (
+              <div className="bg-[#F2F2F7] px-4 py-2 rounded-xl text-center md:text-right">
+                <div className="text-[9px] text-[#8E8E93] uppercase font-black tracking-widest mb-0.5">Следующий</div>
+                <div className="font-mono text-lg font-black text-[#2ECC8E]">{nextPrayer.remaining}</div>
+              </div>
+            )}
+          </div>
+          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+            {[
+              { name: 'Фаджр', time: displaySchedule.fajr, icon: '🌅' },
+              { name: 'Зухр', time: displaySchedule.dhuhr, icon: '☀️' },
+              { name: 'Аср', time: displaySchedule.asr, icon: '🌤️' },
+              { name: 'Магриб', time: displaySchedule.maghrib, icon: '🌅' },
+              { name: 'Иша', time: displaySchedule.isha, icon: '🌙' },
+              { name: 'Джума', time: displaySchedule.juma, icon: '🕌' },
+            ].map((prayer, i) => (
+              <div key={i} className={`p-3 rounded-xl text-center transition-all duration-300 ${nextPrayer?.name === prayer.name ? 'bg-[#2ECC8E] text-white shadow-lg shadow-emerald-100' : 'bg-[#F2F2F7] text-[#1A1A1A]'}`}>
+                <div className="text-lg mb-1">{prayer.icon}</div>
+                <div className={`text-[9px] uppercase font-black tracking-widest mb-1 ${nextPrayer?.name === prayer.name ? 'text-white/80' : 'text-[#8E8E93]'}`}>{prayer.name}</div>
+                <div className="font-mono text-sm font-black">{prayer.time}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services - Green icon circles */}
+      <section className="container mx-auto px-4 py-6">
+        <div className="flex justify-between items-end mb-4">
+          <div>
+            <h2 className="font-black text-xl md:text-2xl text-[#1A1A1A] mb-0.5">Услуги мечети</h2>
+            <p className="text-[#8E8E93] font-bold text-xs">Наши услуги для вас</p>
+          </div>
+          <Link href="/help" className="text-[#2ECC8E] font-black flex items-center gap-1 uppercase text-[10px] tracking-widest">Все <ChevronRight size={12} /></Link>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { title: 'Джаназа', desc: 'Похоронная молитва', icon: '🤲' },
+            { title: 'Никях', desc: 'Исламский брак', icon: '💍' },
+            { title: 'Консультация', desc: 'С имамом', icon: '💬' },
+            { title: 'Хадж/Умра', desc: 'Паломничество', icon: '🕋' },
+          ].map((service, i) => (
+            <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-[#F2F2F7] flex flex-col items-center text-center">
+              <div className="w-12 h-12 rounded-full bg-[#2ECC8E]/10 flex items-center justify-center text-xl mb-3">
+                {service.icon}
+              </div>
+              <h3 className="font-black text-sm text-[#1A1A1A] mb-0.5">{service.title}</h3>
+              <p className="text-[#8E8E93] text-[10px] leading-snug mb-3">{service.desc}</p>
+              <Link href="/help" className="w-full h-7 flex items-center justify-center bg-[#F2F2F7] text-[#1A1A1A] rounded-lg text-[9px] font-black uppercase tracking-wider hover:bg-[#2ECC8E] hover:text-white transition-all">Заявка</Link>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Recent Donations */}
-      <section className="bg-[#F2F2F7] py-10">
+      <section className="bg-[#F2F2F7] py-8">
         <div className="container mx-auto px-4">
-          <h2 className="font-black text-xl md:text-2xl text-[#1A1A1A] mb-6 text-center">Все поступления</h2>
+          <h2 className="font-black text-xl md:text-2xl text-[#1A1A1A] mb-5 text-center">Все поступления</h2>
           <div className="max-w-3xl mx-auto">
             {recentDonations.length > 0 ? (
-              <div className="space-y-2 mb-6">
+              <div className="space-y-2 mb-5">
                 {recentDonations.map((donation, i) => (
                   <div key={i} className="bg-white p-4 rounded-xl flex items-center justify-between shadow-sm">
                     <div className="flex items-center gap-3">
@@ -498,38 +636,21 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Gallery Section */}
-      <section className="container mx-auto px-4 py-10">
-        <h2 className="font-display font-bold text-xl md:text-2xl text-[#1C1C1E] mb-6 text-center">Фотографии мечети</h2>
-        <div className="grid grid-cols-2 gap-3">
-          {[
-            { src: '/media/Главный_план.jpg', alt: 'Главный план мечети' },
-            { src: '/media/Доп_фотка_помещение.jpg', alt: 'Помещение мечети' },
-            { src: '/media/Доп_фотка2_помещение.jpg', alt: 'Интерьер мечети' },
-          ].map((photo, i) => (
-            <div key={i} className="relative aspect-[4/3] rounded-lg overflow-hidden group cursor-pointer">
-              <Image src={photo.src} alt={photo.alt} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Mosque Team Section */}
-      <section className="bg-[#F2F2F7] py-10">
+      <section className="bg-white py-8">
         <div className="container mx-auto px-4">
-          <h2 className="font-display font-bold text-xl md:text-2xl text-[#1C1C1E] mb-6 text-center">Команда мечети</h2>
-          <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
+          <h2 className="font-bold text-xl md:text-2xl text-[#1C1C1E] mb-5 text-center">Команда мечети</h2>
+          <div className="grid grid-cols-2 gap-4 md:gap-6 max-w-md md:max-w-xl mx-auto">
             {[
-              { name: 'Имам Ахунд', role: 'Духовный наставник', image: '/media/Имам-Ахунд.jpg' },
-              { name: 'Имам Хатыб', role: 'Проповедник', image: '/media/Имам-Хатыб.jpg' },
+              { name: 'имам-хатыб', image: '/media/Имам-Хатыб.jpg' },
+              { name: 'имам-ахунд', image: '/media/Имам-Ахунд.jpg' },
             ].map((member, i) => (
               <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm">
-                <div className="aspect-square relative">
+                <div className="aspect-[3/4] relative">
                   <Image src={member.image} alt={member.name} fill className="object-cover" />
                 </div>
-                <div className="p-3 text-center">
-                  <h3 className="font-display font-bold text-sm text-[#1C1C1E] mb-0.5">{member.name}</h3>
-                  <p className="text-[#8E8E93] text-[10px] font-medium">{member.role}</p>
+                <div className="p-4 text-center">
+                  <h3 className="font-bold text-base md:text-lg text-[#1C1C1E]">{member.name}</h3>
                 </div>
               </div>
             ))}
@@ -537,54 +658,29 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Services Section */}
-      <section className="container mx-auto px-4 py-10">
-        <div className="flex justify-between items-end mb-6">
-          <div>
-            <h2 className="font-black text-xl md:text-2xl text-[#1A1A1A] mb-0.5">Услуги мечети</h2>
-            <p className="text-[#8E8E93] font-bold text-xs">Наши услуги для вас</p>
-          </div>
-          <Link href="/help" className="text-[#2ECC8E] font-black flex items-center gap-1 uppercase text-[10px] tracking-widest">Все <ChevronRight size={12} /></Link>
-        </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { title: 'Джаназа', desc: 'Похоронная молитва' },
-            { title: 'Никях', desc: 'Исламский брак' },
-            { title: 'Консультация', desc: 'С имамом' },
-            { title: 'Хадж/Умра', desc: 'Паломничество' },
-          ].map((service, i) => (
-            <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-[#F2F2F7]">
-              <h3 className="font-black text-sm text-[#1A1A1A] mb-1">{service.title}</h3>
-              <p className="text-[#8E8E93] text-[10px] leading-snug mb-3">{service.desc}</p>
-              <Link href="/help" className="w-full h-7 flex items-center justify-center bg-[#F2F2F7] text-[#1A1A1A] rounded-lg text-[9px] font-black uppercase tracking-wider hover:bg-[#2ECC8E] hover:text-white transition-all">Заявка</Link>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Upcoming Events */}
       {events.length > 0 && (
-        <section className="container mx-auto px-4 py-10">
-          <div className="flex justify-between items-end mb-6">
+        <section className="container mx-auto px-4 py-6">
+          <div className="flex justify-between items-end mb-4">
             <div>
               <h2 className="font-black text-xl md:text-2xl text-[#1A1A1A] mb-0.5">Ближайшие события</h2>
               <p className="text-[#8E8E93] font-bold text-xs">Мероприятия мечети</p>
             </div>
             <Link href="/events" className="text-[#2ECC8E] font-black flex items-center gap-1 uppercase text-[10px] tracking-widest">Все <ChevronRight size={12} /></Link>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             {events.slice(0, 3).map((event: any, i: number) => (
-              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#F2F2F7] p-5">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 bg-[#2ECC8E]/10 rounded-xl flex items-center justify-center">
-                    <Calendar size={18} className="text-[#2ECC8E]" />
+              <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm border border-[#F2F2F7] p-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="w-9 h-9 bg-[#2ECC8E]/10 rounded-xl flex items-center justify-center">
+                    <Calendar size={16} className="text-[#2ECC8E]" />
                   </div>
                   <div>
                     <div className="text-[10px] font-black uppercase tracking-widest text-[#8E8E93]">{format(new Date(event.date), 'd MMMM', { locale: ru })}</div>
                     <div className="text-[10px] text-[#8E8E93] flex items-center gap-1"><Clock size={10} /> {format(new Date(event.date), 'HH:mm')}</div>
                   </div>
                 </div>
-                <h3 className="font-black text-base text-[#1A1A1A] mb-2">{event.title}</h3>
+                <h3 className="font-black text-sm text-[#1A1A1A] mb-1">{event.title}</h3>
                 <p className="text-[#8E8E93] text-xs leading-relaxed line-clamp-2">{event.description}</p>
               </div>
             ))}
@@ -592,46 +688,13 @@ export default function Home() {
         </section>
       )}
 
-      {/* Prayer Schedule */}
-      <section className="container mx-auto px-4 py-10">
-        <div className="max-w-5xl mx-auto bg-white rounded-2xl p-5 md:p-8 shadow-sm border border-[#F2F2F7]">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
-            <div className="text-center md:text-left">
-              <h3 className="font-black text-xl text-[#1A1A1A] mb-1">Время намаза</h3>
-              <p className="text-[#8E8E93] font-bold uppercase text-[9px] tracking-widest">{format(new Date(), 'EEEE, d MMMM', { locale: ru })}</p>
-            </div>
-            {nextPrayer && (
-              <div className="bg-[#F2F2F7] px-5 py-3 rounded-xl text-center md:text-right">
-                <div className="text-[9px] text-[#8E8E93] uppercase font-black tracking-widest mb-0.5">Следующий намаз через</div>
-                <div className="font-mono text-xl font-black text-[#2ECC8E]">{nextPrayer.remaining}</div>
-              </div>
-            )}
-          </div>
-          <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-            {[
-              { name: 'Фаджр', time: displaySchedule.fajr },
-              { name: 'Зухр', time: displaySchedule.dhuhr },
-              { name: 'Аср', time: displaySchedule.asr },
-              { name: 'Магриб', time: displaySchedule.maghrib },
-              { name: 'Иша', time: displaySchedule.isha },
-              { name: 'Джума', time: displaySchedule.juma },
-            ].map((prayer, i) => (
-              <div key={i} className={`p-4 rounded-xl text-center transition-all duration-300 ${nextPrayer?.name === prayer.name ? 'bg-[#2ECC8E] text-white shadow-lg shadow-emerald-100' : 'bg-[#F2F2F7] text-[#1A1A1A]'}`}>
-                <div className={`text-[9px] uppercase font-black tracking-widest mb-2 ${nextPrayer?.name === prayer.name ? 'text-white/80' : 'text-[#8E8E93]'}`}>{prayer.name}</div>
-                <div className="font-mono text-base font-black">{prayer.time}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Recurring Support */}
-      <section className="container mx-auto px-4 pb-10">
-        <div className="bg-[#F2F2F7] rounded-2xl p-6 md:p-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div className="space-y-6">
+      <section className="container mx-auto px-4 pb-8">
+        <div className="bg-[#F2F2F7] rounded-2xl p-5 md:p-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+            <div className="space-y-4">
               <div>
-                <h2 className="font-black text-xl md:text-2xl text-[#1A1A1A] leading-tight mb-3">Станьте постоянным помощником мечети</h2>
+                <h2 className="font-black text-xl md:text-2xl text-[#1A1A1A] leading-tight mb-2">Станьте постоянным помощником мечети</h2>
                 <p className="text-[#8E8E93] text-sm font-medium leading-relaxed">Небольшой регулярный вклад важнее редкого большого. Это позволяет нам планировать развитие и стабильно поддерживать работу мечети.</p>
               </div>
               <div className="space-y-3">
@@ -649,12 +712,12 @@ export default function Home() {
                 ))}
               </div>
             </div>
-            <div className="bg-white p-6 rounded-2xl flex flex-col items-center justify-center text-center space-y-4 shadow-lg">
-              <div className="w-14 h-14 bg-[#F2FBF7] rounded-full flex items-center justify-center text-[#2ECC8E]">
-                <Heart size={28} className="fill-current" />
+            <div className="bg-white p-5 rounded-2xl flex flex-col items-center justify-center text-center space-y-3 shadow-lg">
+              <div className="w-12 h-12 bg-[#F2FBF7] rounded-full flex items-center justify-center text-[#2ECC8E]">
+                <Heart size={24} className="fill-current" />
               </div>
               <div>
-                <h3 className="font-black text-lg text-[#1A1A1A] mb-1">Подключить подписку</h3>
+                <h3 className="font-black text-base text-[#1A1A1A] mb-0.5">Подключить подписку</h3>
                 <p className="text-[#8E8E93] font-medium text-xs">Выберите удобную сумму и период</p>
               </div>
               <button onClick={() => { setIsRecurring(true); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="w-full bg-[#1A1A1A] text-white py-3 rounded-xl font-black text-[10px] uppercase tracking-[0.15em] hover:bg-[#2ECC8E] transition-all">

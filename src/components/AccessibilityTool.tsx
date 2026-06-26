@@ -93,7 +93,7 @@ export default function AccessibilityTool() {
 
       <style jsx global>{`
         .high-contrast {
-          filter: contrast(1.2) saturate(1.2);
+          filter: contrast(1.3) saturate(1.3);
         }
         .high-contrast body {
           background-color: #fff !important;
@@ -112,10 +112,32 @@ export default function AccessibilityTool() {
         .high-contrast .text-white {
           color: #fff !important;
         }
+        .high-contrast .text-white\/70,
+        .high-contrast .text-white\/80,
+        .high-contrast .text-white\/50,
+        .high-contrast .text-white\/60 {
+          color: #fff !important;
+        }
         .high-contrast .btn-primary {
           background-color: #000 !important;
           color: #fff !important;
           border: 2px solid #000 !important;
+        }
+        .high-contrast a {
+          color: #000 !important;
+          text-decoration: underline !important;
+        }
+        .high-contrast img {
+          filter: contrast(1.1) !important;
+        }
+        .high-contrast .bg-\\[\\#2ECC8E\\] {
+          background-color: #000 !important;
+          color: #fff !important;
+        }
+        .high-contrast input, .high-contrast textarea {
+          border: 2px solid #000 !important;
+          background-color: #fff !important;
+          color: #000 !important;
         }
       `}</style>
     </div>
