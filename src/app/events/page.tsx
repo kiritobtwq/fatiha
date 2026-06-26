@@ -40,7 +40,7 @@ export default function EventsPage() {
                 <div className="md:w-1/3 relative overflow-hidden">
                   <div className="absolute inset-0 bg-primary/40 z-10"></div>
                   <Image 
-                    src="https://images.unsplash.com/photo-1545036447-493775489873?q=80&w=600&auto=format&fit=crop" 
+                    src="/media/Главный_план.jpg"
                     alt={event.title}
                     fill
                     className="object-cover group-hover:scale-110 transition-transform duration-500"

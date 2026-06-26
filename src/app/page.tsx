@@ -272,8 +272,8 @@ export default function Home() {
       <section className="relative min-h-[600px] md:min-h-[700px] lg:h-[85vh] flex items-center overflow-hidden font-sans">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1545036447-493775489873?q=80&w=2070&auto=format&fit=crop"
-            alt="Мечеть"
+            src="/media/Главный_план.jpg"
+            alt="Мечеть Фатиха"
             fill
             className="object-cover"
             priority
@@ -501,15 +501,14 @@ export default function Home() {
       {/* Gallery Section */}
       <section className="container mx-auto px-4 py-10">
         <h2 className="font-display font-bold text-xl md:text-2xl text-[#1C1C1E] mb-6 text-center">Фотографии мечети</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <div className="grid grid-cols-2 gap-3">
           {[
-            'https://images.unsplash.com/photo-1545036447-493775489873?q=80&w=600&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1508373938814-a400080ebc4a?q=80&w=600&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1512347805902-d99e3e5805e0?q=80&w=600&auto=format&fit=crop',
-            'https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?q=80&w=600&auto=format&fit=crop',
-          ].map((src, i) => (
+            { src: '/media/Главный_план.jpg', alt: 'Главный план мечети' },
+            { src: '/media/Доп_фотка_помещение.jpg', alt: 'Помещение мечети' },
+            { src: '/media/Доп_фотка2_помещение.jpg', alt: 'Интерьер мечети' },
+          ].map((photo, i) => (
             <div key={i} className="relative aspect-[4/3] rounded-lg overflow-hidden group cursor-pointer">
-              <Image src={src} alt={`Фотография мечети ${i + 1}`} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
+              <Image src={photo.src} alt={photo.alt} fill className="object-cover transition-transform duration-500 group-hover:scale-110" />
             </div>
           ))}
         </div>
@@ -521,8 +520,8 @@ export default function Home() {
           <h2 className="font-display font-bold text-xl md:text-2xl text-[#1C1C1E] mb-6 text-center">Команда мечети</h2>
           <div className="grid grid-cols-2 gap-3 max-w-md mx-auto">
             {[
-              { name: 'Имам', role: 'Духовный наставник', image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop' },
-              { name: 'Муэдзин', role: 'Призыв на молитву', image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=400&auto=format&fit=crop' },
+              { name: 'Имам Ахунд', role: 'Духовный наставник', image: '/media/Имам-Ахунд.jpg' },
+              { name: 'Имам Хатыб', role: 'Проповедник', image: '/media/Имам-Хатыб.jpg' },
             ].map((member, i) => (
               <div key={i} className="bg-white rounded-2xl overflow-hidden shadow-sm">
                 <div className="aspect-square relative">
@@ -549,20 +548,15 @@ export default function Home() {
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {[
-            { title: 'Джаназа', desc: 'Похоронная молитва', img: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400&auto=format&fit=crop' },
-            { title: 'Никях', desc: 'Исламский брак', img: 'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=400&auto=format&fit=crop' },
-            { title: 'Консультация', desc: 'С имамом', img: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400&auto=format&fit=crop' },
-            { title: 'Хадж/Умра', desc: 'Паломничество', img: 'https://images.unsplash.com/photo-1535332371981-c09101c04993?q=80&w=400&auto=format&fit=crop' },
+            { title: 'Джаназа', desc: 'Похоронная молитва' },
+            { title: 'Никях', desc: 'Исламский брак' },
+            { title: 'Консультация', desc: 'С имамом' },
+            { title: 'Хадж/Умра', desc: 'Паломничество' },
           ].map((service, i) => (
-            <div key={i} className="bg-white rounded-xl overflow-hidden flex flex-col group shadow-sm border border-[#F2F2F7]">
-              <div className="aspect-[16/10] overflow-hidden relative">
-                <Image src={service.img} alt={service.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
-              </div>
-              <div className="p-3 flex flex-col flex-1">
-                <h3 className="font-black text-sm text-[#1A1A1A] mb-1">{service.title}</h3>
-                <p className="text-[#8E8E93] text-[10px] leading-snug mb-2 flex-1">{service.desc}</p>
-                <Link href="/help" className="w-full h-7 flex items-center justify-center bg-[#F2F2F7] text-[#1A1A1A] rounded-lg text-[9px] font-black uppercase tracking-wider hover:bg-[#2ECC8E] hover:text-white transition-all">Заявка</Link>
-              </div>
+            <div key={i} className="bg-white rounded-xl p-4 shadow-sm border border-[#F2F2F7]">
+              <h3 className="font-black text-sm text-[#1A1A1A] mb-1">{service.title}</h3>
+              <p className="text-[#8E8E93] text-[10px] leading-snug mb-3">{service.desc}</p>
+              <Link href="/help" className="w-full h-7 flex items-center justify-center bg-[#F2F2F7] text-[#1A1A1A] rounded-lg text-[9px] font-black uppercase tracking-wider hover:bg-[#2ECC8E] hover:text-white transition-all">Заявка</Link>
             </div>
           ))}
         </div>
