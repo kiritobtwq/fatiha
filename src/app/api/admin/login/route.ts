@@ -32,10 +32,10 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@alfatiha-birsk.ru';
+    const adminEmail = process.env.ADMIN_EMAIL;
     const adminHash = process.env.ADMIN_PASSWORD_HASH;
 
-    if (!adminHash) {
+    if (!adminHash || !adminEmail) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 

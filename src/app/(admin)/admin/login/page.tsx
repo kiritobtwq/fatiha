@@ -29,7 +29,8 @@ export default function AdminLoginPage() {
         throw new Error(data.error || 'Login failed');
       }
 
-      router.push('/alfatiha-admin-portal-9k2x4');
+      const base = window.location.pathname.split('/').slice(0, 2).join('/');
+      router.push(base);
     } catch (err: any) {
       setError(err.message);
     } finally {

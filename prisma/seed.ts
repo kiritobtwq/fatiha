@@ -4,23 +4,22 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  // Strong password: Alf@tiha2024!Secure
-  const adminPassword = 'Alf@tiha2024!Secure';
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@fatiha-birsk.ru';
+  const adminPassword = process.env.ADMIN_SEED_PASSWORD || 'f@tiha26!SecureP@55w0rd';
   const passwordHash = await bcrypt.hash(adminPassword, 10);
 
   await prisma.adminUser.upsert({
-    where: { email: 'admin@alfatiha-birsk.ru' },
+    where: { email: adminEmail },
     update: { passwordHash },
     create: {
-      email: 'admin@alfatiha-birsk.ru',
+      email: adminEmail,
       passwordHash,
     },
   });
 
   console.log('✓ Admin user created');
-  console.log('  Email: admin@alfatiha-birsk.ru');
-  console.log('  Password: Alf@tiha2024!Secure');
-  console.log('  ⚠ СМЕНИТЕ ПАРОЛЬ ПЕРВОЙ ДЕЙСТВИЕМ В АДМИНКЕ!');
+  console.log('  Email: ' + adminEmail);
+  console.log('  ⚠ Настройте ADMIN_PASSWORD_HASH в Vercel и удалите ADMIN_SEED_PASSWORD');
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
