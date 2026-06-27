@@ -20,12 +20,6 @@ http://localhost:3000
 ngrok http 3000
 ```
 
-## Админ-панель
-
-- URL: `/alfatiha-secure-panel-2024x9k/login`
-- Email: admin@alfatiha-birsk.ru
-- Пароль: Alf@tiha2024!Secure
-
 ## Технологии
 
 Next.js 14, React, Tailwind CSS, PostgreSQL, Prisma, YooKassa
