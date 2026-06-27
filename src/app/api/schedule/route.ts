@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { startOfDay, endOfDay } from 'date-fns';
+import { calculatePrayerTimes } from '@/lib/prayerTimes';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -17,13 +18,19 @@ export async function GET(request: Request) {
       },
     });
 
-    if (!schedule) {
-      return NextResponse.json(null);
+    if (schedule) {
+      return NextResponse.json(schedule);
     }
 
-    return NextResponse.json(schedule);
+    const calculated = calculatePrayerTimes(date);
+    return NextResponse.json(calculated);
   } catch (error) {
     console.error('Schedule API error:', error);
-    return NextResponse.json(null);
+    try {
+      const calculated = calculatePrayerTimes(date);
+      return NextResponse.json(calculated);
+    } catch {
+      return NextResponse.json(null);
+    }
   }
 }
