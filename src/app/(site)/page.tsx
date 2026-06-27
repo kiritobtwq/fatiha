@@ -116,7 +116,7 @@ export default function Home() {
   const [widgetError, setWidgetError] = useState('');
   const [consentGiven, setConsentGiven] = useState(false);
   const [isRecurring, setIsRecurring] = useState(false);
-  const [phone, setPhone] = useState('+7 ');
+  const [phone, setPhone] = useState('+7');
   const [phoneError, setPhoneError] = useState('');
 
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -386,25 +386,27 @@ export default function Home() {
     return 'человек';
   };
 
-  const formatPhone = (value: string): string => {
-    const digits = value.replace(/\D/g, '');
-    if (digits.length === 0) return '+7 ';
-    const start = digits[0] === '7' || digits[0] === '8' ? '7' : '7';
-    let result = '+7 ';
-    const area = digits.substring(1, 4);
-    const mid = digits.substring(4, 7);
-    const last2 = digits.substring(7, 9);
-    const last22 = digits.substring(9, 11);
-    if (area) result += '(' + area;
-    if (area.length === 3) result += ') ';
-    if (mid) result += mid;
-    if (last2) result += '-' + last2;
-    if (last22) result += '-' + last22;
-    return result;
+  const formatPhone = (d: string): string => {
+    if (!d) return '+7';
+    let s = '+7';
+    if (d.length > 1) s += ' (' + d.substring(1, Math.min(4, d.length));
+    if (d.length >= 4) s += ')';
+    if (d.length > 4) s += ' ' + d.substring(4, Math.min(7, d.length));
+    if (d.length > 7) s += '-' + d.substring(7, Math.min(9, d.length));
+    if (d.length > 9) s += '-' + d.substring(9, Math.min(11, d.length));
+    return s;
   };
 
   const handlePhoneChange = (value: string) => {
-    setPhone(formatPhone(value));
+    let digits = value.replace(/\D/g, '');
+    if (digits.length === 0) {
+      setPhone('+7');
+      setPhoneError('');
+      return;
+    }
+    if (digits[0] !== '7') digits = '7' + digits;
+    digits = digits.substring(0, 11);
+    setPhone(formatPhone(digits));
     setPhoneError('');
   };
 
