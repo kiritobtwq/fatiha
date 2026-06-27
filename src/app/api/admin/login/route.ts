@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { cookies } from 'next/headers';
@@ -33,20 +32,23 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
     }
 
-    const admin = await prisma.adminUser.findUnique({
-      where: { email },
-    });
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@alfatiha-birsk.ru';
+    const adminHash = process.env.ADMIN_PASSWORD_HASH;
 
-    if (!admin) {
+    if (!adminHash) {
+      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    }
+
+    if (email !== adminEmail) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const isValid = await bcrypt.compare(password, admin.passwordHash);
+    const isValid = await bcrypt.compare(password, adminHash);
     if (!isValid) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    const token = jwt.sign({ id: admin.id, email: admin.email }, jwtSecret, {
+    const token = jwt.sign({ id: 1, email: adminEmail }, jwtSecret, {
       expiresIn: '24h',
     });
 
