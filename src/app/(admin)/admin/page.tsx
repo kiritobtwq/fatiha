@@ -35,7 +35,10 @@ interface Donation {
   amount: number;
   donorName: string;
   donorEmail: string;
+  phone?: string | null;
   status: string;
+  isRecurring?: boolean;
+  recurringPeriod?: string | null;
   createdAt: string;
 }
 
@@ -351,8 +354,9 @@ export default function AdminDashboardPage() {
                     <thead>
                       <tr className="bg-slate-50 border-b border-slate-100">
                         <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Имя</th>
-                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Email</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Телефон</th>
                         <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Сумма</th>
+                        <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Тип</th>
                         <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Дата</th>
                         <th className="px-6 py-4 text-xs font-bold text-slate-400 uppercase tracking-wider">Статус</th>
                         <th className="px-6 py-4"></th>
@@ -362,8 +366,17 @@ export default function AdminDashboardPage() {
                       {donations.map((donation) => (
                         <tr key={donation.id} className="hover:bg-slate-50/50 transition-colors">
                           <td className="px-6 py-4 font-bold text-slate-700">{donation.donorName}</td>
-                          <td className="px-6 py-4 text-sm text-slate-500">{donation.donorEmail}</td>
+                          <td className="px-6 py-4 text-sm text-slate-500">{donation.phone || '—'}</td>
                           <td className="px-6 py-4 font-black text-primary">{formatNumber(donation.amount)} ₽</td>
+                          <td className="px-6 py-4">
+                            {donation.isRecurring ? (
+                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-purple-50 text-purple-600">
+                                Подписка
+                              </span>
+                            ) : (
+                              <span className="text-xs text-slate-400">Разово</span>
+                            )}
+                          </td>
                           <td className="px-6 py-4 text-sm text-slate-500">{new Date(donation.createdAt).toLocaleDateString()}</td>
                           <td className="px-6 py-4">
                             <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
@@ -393,21 +406,25 @@ export default function AdminDashboardPage() {
                   {donations.map((donation) => (
                     <div key={donation.id} className="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
                       <div className="flex items-center justify-between mb-2">
-                        <span className="font-bold text-slate-700">{donation.donorName}</span>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-slate-700">{donation.donorName}</span>
+                          {donation.isRecurring && (
+                            <span className="px-1.5 py-0.5 rounded text-[9px] font-black uppercase bg-purple-50 text-purple-600">Подписка</span>
+                          )}
+                        </div>
                         <span className="font-black text-primary">{formatNumber(donation.amount)} ₽</span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-slate-400">{new Date(donation.createdAt).toLocaleDateString()}</span>
-                        <div className="flex items-center gap-2">
-                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
-                            donation.status === 'succeeded' ? 'bg-emerald-50 text-emerald-600'
-                            : donation.status === 'pending' ? 'bg-amber-50 text-amber-600'
-                            : 'bg-red-50 text-red-600'
-                          }`}>
-                            {donation.status === 'succeeded' ? 'Успешно' : donation.status === 'pending' ? 'Ожидание' : 'Отменено'}
-                          </span>
-                          <button onClick={async () => { if (!confirm('Удалить?')) return; await fetch(`/api/admin/donations?id=${donation.id}`, { method: 'DELETE', credentials: 'include' }); loadData(); }} className="text-red-300 hover:text-red-500 text-xs font-bold">Удалить</button>
-                        </div>
+                      <div className="flex flex-wrap items-center gap-2 text-xs text-slate-400">
+                        <span>{new Date(donation.createdAt).toLocaleDateString()}</span>
+                        {donation.phone && <span>• {donation.phone}</span>}
+                        <span className={`ml-auto inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                          donation.status === 'succeeded' ? 'bg-emerald-50 text-emerald-600'
+                          : donation.status === 'pending' ? 'bg-amber-50 text-amber-600'
+                          : 'bg-red-50 text-red-600'
+                        }`}>
+                          {donation.status === 'succeeded' ? 'Успешно' : donation.status === 'pending' ? 'Ожидание' : 'Отменено'}
+                        </span>
+                        <button onClick={async () => { if (!confirm('Удалить?')) return; await fetch(`/api/admin/donations?id=${donation.id}`, { method: 'DELETE', credentials: 'include' }); loadData(); }} className="text-red-300 hover:text-red-500 text-xs font-bold">Удалить</button>
                       </div>
                     </div>
                   ))}

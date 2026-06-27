@@ -98,7 +98,7 @@ export default function SupportersPage() {
                   Небольшой регулярный вклад важнее редкого большого
                 </p>
               </div>
-              <Link href="/" className="btn-primary text-lg">
+              <Link href="/#donation-widget" className="btn-primary text-lg">
                 Подключить подписку <ArrowRight className="ml-2" size={20} />
               </Link>
             </div>

@@ -115,6 +115,9 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [widgetError, setWidgetError] = useState('');
   const [consentGiven, setConsentGiven] = useState(false);
+  const [isRecurring, setIsRecurring] = useState(false);
+  const [phone, setPhone] = useState('+7 ');
+  const [phoneError, setPhoneError] = useState('');
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [galleryPhotos, setGalleryPhotos] = useState<{ src: string; alt: string }[]>([]);
@@ -383,11 +386,38 @@ export default function Home() {
     return 'человек';
   };
 
+  const formatPhone = (value: string): string => {
+    const digits = value.replace(/\D/g, '');
+    if (digits.length === 0) return '+7 ';
+    const start = digits[0] === '7' || digits[0] === '8' ? '7' : '7';
+    let result = '+7 ';
+    const area = digits.substring(1, 4);
+    const mid = digits.substring(4, 7);
+    const last2 = digits.substring(7, 9);
+    const last22 = digits.substring(9, 11);
+    if (area) result += '(' + area;
+    if (area.length === 3) result += ') ';
+    if (mid) result += mid;
+    if (last2) result += '-' + last2;
+    if (last22) result += '-' + last22;
+    return result;
+  };
+
+  const handlePhoneChange = (value: string) => {
+    setPhone(formatPhone(value));
+    setPhoneError('');
+  };
+
   const handleDonateSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!consentGiven) {
       setWidgetError('Необходимо дать согласие на обработку персональных данных');
+      return;
+    }
+
+    if (isRecurring && phone.replace(/\D/g, '').length < 11) {
+      setPhoneError('Введите корректный номер телефона');
       return;
     }
 
@@ -401,6 +431,8 @@ export default function Home() {
         body: JSON.stringify({
           amount: parseFloat(donateAmount) || 0,
           donorName: isAnonymous ? 'Аноним' : 'Брат/Сестра',
+          isRecurring,
+          phone: isRecurring ? phone : null,
         }),
       });
 
@@ -549,10 +581,25 @@ export default function Home() {
             >
               <div className="bg-white rounded-3xl p-6 shadow-2xl" style={{ boxShadow: '0 30px 80px rgba(0, 0, 0, 0.3)' }}>
                 <h2 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
+
+                <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
+                  <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
+                  <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
+                </div>
+
                 <div className="space-y-3 mb-4">
                   <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13, 124, 95, 0.1)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.boxShadow = 'none'; }} />
                   <button onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-10 rounded-xl border text-xs font-bold transition-all duration-200`} style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
                 </div>
+
+                {isRecurring && (
+                  <div className="mb-4">
+                    <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
+                    <input type="tel" value={phone} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+                    {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
+                  </div>
+                )}
+
                 <div className="mb-4">
                   <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Сумма (₽)</label>
                   <div className="flex gap-2 flex-wrap mb-2">
@@ -568,7 +615,7 @@ export default function Home() {
                 </button>
                 {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
                 <button onClick={handleDonateSubmit} className="w-full h-16 text-white rounded-2xl text-base font-bold transition-all duration-300 hover:shadow-lg" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
-                  Оплатить через ЮKassa
+                  {isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'}
                 </button>
               </div>
             </motion.div>
@@ -594,10 +641,25 @@ export default function Home() {
       <section className="lg:hidden px-4 py-4 relative z-30" style={{ backgroundColor: 'var(--color-bg)' }}>
         <div id="donation-widget" className="bg-white rounded-3xl p-6 shadow-xl" style={{ boxShadow: '0 15px 40px rgba(0, 0, 0, 0.1)' }}>
           <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
+
+          <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
+            <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
+            <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
+          </div>
+
           <div className="space-y-3 mb-4">
             <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-10 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200 disabled:opacity-50" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; }} />
             <button onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-9 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
           </div>
+
+          {isRecurring && (
+            <div className="mb-4">
+              <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
+              <input type="tel" value={phone} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-10 px-3 bg-white rounded-xl text-sm font-medium transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+              {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
+            </div>
+          )}
+
           <div className="mb-4">
             <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Сумма (₽)</label>
             <div className="flex gap-1.5 flex-wrap mb-2">
@@ -613,7 +675,7 @@ export default function Home() {
           </button>
           {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
           <button onClick={handleDonateSubmit} className="w-full h-14 text-white rounded-2xl text-base font-bold transition-all duration-300" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
-            Оплатить через ЮKassa
+            {isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'}
           </button>
           </div>
       </section>

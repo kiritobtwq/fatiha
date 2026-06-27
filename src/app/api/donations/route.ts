@@ -10,6 +10,7 @@ const donationSchema = z.object({
   donorName: z.string().max(100).optional(),
   isRecurring: z.boolean().optional(),
   recurringPeriod: z.string().nullable().optional(),
+  phone: z.string().nullable().optional(),
 });
 
 export async function GET(request: Request) {
@@ -69,13 +70,14 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const validatedData = donationSchema.parse(body);
-    const { amount, donorName = 'Аноним', isRecurring = false, recurringPeriod = null } = validatedData;
+    const { amount, donorName = 'Аноним', isRecurring = false, recurringPeriod = null, phone = null } = validatedData;
 
     const donation = await prisma.donation.create({
       data: {
         amount: Number(amount),
         donorName,
         donorEmail: '',
+        phone,
         status: 'pending',
         isRecurring,
         recurringPeriod,

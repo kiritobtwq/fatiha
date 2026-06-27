@@ -58,6 +58,7 @@ model Donation {
   amount             Float
   donorName          String
   donorEmail         String
+  phone              String?
   status             String   // 'pending', 'succeeded', 'canceled'
   yookassaPaymentId  String?  @unique
   isRecurring        Boolean  @default(false)
