@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { verifyAuth } from '@/lib/auth';
+import { deleteImage } from '@/lib/cloudinary';
 
 export async function GET(request: Request) {
   try {
@@ -74,6 +75,14 @@ export async function DELETE(request: Request) {
 
     if (!id) {
       return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+    }
+
+    const image = await (prisma as any).galleryImage.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (image?.url) {
+      deleteImage(image.url).catch(() => {});
     }
 
     await (prisma as any).galleryImage.delete({
