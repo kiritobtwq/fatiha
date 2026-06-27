@@ -127,6 +127,7 @@ export default function Home() {
   const isDragging = useRef(false);
   const dragStartX = useRef(0);
 
+  const phoneInputRef = useRef<HTMLInputElement>(null);
   const heroRef = useRef(null);
 
   const aboutRef = useRef(null);
@@ -397,19 +398,40 @@ export default function Home() {
     return s;
   };
 
+  const handlePhoneKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Backspace') return;
+    const input = e.currentTarget;
+    const start = input.selectionStart ?? 0;
+    const end = input.selectionEnd ?? 0;
+    if (start !== end) return;
+    if (start > 0 && !/\d/.test(input.value[start - 1])) {
+      e.preventDefault();
+      let pos = start - 1;
+      while (pos >= 0 && !/\d/.test(input.value[pos])) pos--;
+      if (pos >= 0) {
+        const removed = input.value.substring(0, pos) + input.value.substring(pos + 1);
+        let raw = removed.replace(/\D/g, '');
+        if (!raw || raw === '7') { setPhone('+7'); }
+        else {
+          if (raw[0] !== '7') raw = '7' + raw;
+          setPhone(formatPhone(raw.substring(0, 11)));
+        }
+        requestAnimationFrame(() => {
+          const el = phoneInputRef.current;
+          if (el) { const len = el.value.length; el.setSelectionRange(len, len); }
+        });
+      }
+    }
+  };
+
   const handlePhoneChange = (value: string) => {
     const oldRaw = phone.replace(/\D/g, '');
     const newRaw = value.replace(/\D/g, '');
     if (newRaw === oldRaw) return;
-    if (newRaw.length === 0) {
-      setPhone('+7');
-      setPhoneError('');
-      return;
-    }
+    if (newRaw.length === 0) { setPhone('+7'); setPhoneError(''); return; }
     let digits = newRaw;
     if (digits[0] !== '7') digits = '7' + digits;
-    digits = digits.substring(0, 11);
-    setPhone(formatPhone(digits));
+    setPhone(formatPhone(digits.substring(0, 11)));
     setPhoneError('');
   };
 
@@ -600,7 +622,7 @@ export default function Home() {
                 {isRecurring && (
                   <div className="mb-4">
                     <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
-                    <input type="tel" value={phone} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+                    <input type="tel" ref={phoneInputRef} value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
                     {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
                   </div>
                 )}
@@ -660,7 +682,7 @@ export default function Home() {
           {isRecurring && (
             <div className="mb-4">
               <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
-              <input type="tel" value={phone} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-10 px-3 bg-white rounded-xl text-sm font-medium transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+              <input type="tel" value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-10 px-3 bg-white rounded-xl text-sm font-medium transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
               {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
             </div>
           )}
