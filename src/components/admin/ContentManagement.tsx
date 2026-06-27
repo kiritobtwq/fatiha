@@ -49,6 +49,7 @@ export default function ContentManagement({ content, setContent, loadData }: Pro
 
       const res = await fetch('/api/admin/upload', {
         method: 'POST',
+        credentials: 'include',
         body: uploadFormData,
       });
 
@@ -72,6 +73,7 @@ export default function ContentManagement({ content, setContent, loadData }: Pro
       const res = await fetch('/api/admin/content', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
@@ -98,6 +100,7 @@ export default function ContentManagement({ content, setContent, loadData }: Pro
       const res = await fetch('/api/admin/content', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ ...formData, id: editingContent.id }),
       });
 
@@ -122,7 +125,7 @@ export default function ContentManagement({ content, setContent, loadData }: Pro
 
     try {
       const res = await fetch(`/api/admin/content?id=${id}`, {
-        method: 'DELETE',
+        method: 'DELETE', credentials: 'include',
       });
 
       if (res.ok) {

@@ -1,67 +1,321 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Nunito:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700;800&family=Nunito:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --color-primary: #2ECC8E;
-  --color-primary-dark: #1FA870;
-  --color-primary-light: #E8F8F2;
-  --color-bg: #F7FAF8;
-  --color-border: #D4EDE3;
+  --color-primary: #0d7c5f;
+  --color-primary-dark: #095e48;
+  --color-primary-light: #e6f5ef;
+  --color-accent: #0d7c5f;
+  --color-accent-light: #e6f5ef;
+  --color-bg: #fafbf9;
+  --color-bg-deep: #f0f5f1;
+  --color-border: #d4e8db;
+  --color-surface: #ffffff;
+  --color-text: #0f1a14;
+  --color-text-secondary: #4a5d52;
+  --color-text-muted: #8a9c92;
+  --color-dark-bg: #0a1210;
+  --color-dark-surface: #131f1a;
+  --color-dark-border: rgba(255,255,255,0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   background-color: var(--color-bg);
-  color: #1C1C1E;
+  color: var(--color-text);
   font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
 }
 
-/* Fallback styles if Tailwind fails */
-h1, h2, h3, h4, h5, h6 { margin: 0.5em 0; font-weight: 700; }
-p { margin: 0.5em 0; }
-a { color: #2ECC8E; text-decoration: none; }
-a:hover { text-decoration: underline; }
-button { cursor: pointer; font-family: inherit; }
-img { max-width: 100%; height: auto; }
-.container { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Parallax container */
+.parallax-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.parallax-bg {
+  position: absolute;
+  inset: -20% 0;
+  width: 100%;
+  height: 140%;
+  object-fit: cover;
+  will-change: transform;
+}
+
+/* Islamic geometric pattern overlay */
+.islamic-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    linear-gradient(30deg, var(--color-primary) 12%, transparent 12.5%, transparent 87%, var(--color-primary) 87.5%, var(--color-primary)),
+    linear-gradient(150deg, var(--color-primary) 12%, transparent 12.5%, transparent 87%, var(--color-primary) 87.5%, var(--color-primary)),
+    linear-gradient(30deg, var(--color-primary) 12%, transparent 12.5%, transparent 87%, var(--color-primary) 87.5%, var(--color-primary)),
+    linear-gradient(150deg, var(--color-primary) 12%, transparent 12.5%, transparent 87%, var(--color-primary) 87.5%, var(--color-primary)),
+    linear-gradient(60deg, rgba(13,124,95,0.3) 25%, transparent 25.5%, transparent 75%, rgba(13,124,95,0.3) 75%, rgba(13,124,95,0.3)),
+    linear-gradient(60deg, rgba(13,124,95,0.3) 25%, transparent 25.5%, transparent 75%, rgba(13,124,95,0.3) 75%, rgba(13,124,95,0.3));
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+  pointer-events: none;
+}
+
+.islamic-pattern-light {
+  opacity: 0.03;
+  background-image:
+    linear-gradient(30deg, var(--color-accent) 12%, transparent 12.5%, transparent 87%, var(--color-accent) 87.5%, var(--color-accent)),
+    linear-gradient(150deg, var(--color-accent) 12%, transparent 12.5%, transparent 87%, var(--color-accent) 87.5%, var(--color-accent)),
+    linear-gradient(30deg, var(--color-accent) 12%, transparent 12.5%, transparent 87%, var(--color-accent) 87.5%, var(--color-accent)),
+    linear-gradient(150deg, var(--color-accent) 12%, transparent 12.5%, transparent 87%, var(--color-accent) 87.5%, var(--color-accent)),
+    linear-gradient(60deg, rgba(13,124,95,0.2) 25%, transparent 25.5%, transparent 75%, rgba(13,124,95,0.2) 75%, rgba(13,124,95,0.2)),
+    linear-gradient(60deg, rgba(13,124,95,0.2) 25%, transparent 25.5%, transparent 75%, rgba(13,124,95,0.2) 75%, rgba(13,124,95,0.2));
+  background-size: 80px 140px;
+  background-position: 0 0, 0 0, 40px 70px, 40px 70px, 0 0, 40px 70px;
+}
+
+/* Section divider with arabesque pattern */
+.section-divider {
+  position: relative;
+  height: 80px;
+  overflow: hidden;
+}
+
+.section-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-primary), transparent);
+}
+
+.section-divider::after {
+  content: '✦';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  color: var(--color-accent);
+  background: var(--color-bg);
+  padding: 0 16px;
+}
+
+.section-divider-dark::after {
+  background: var(--color-dark-bg);
+  color: var(--color-accent);
+}
+
+.section-divider-dark::before {
+  background: linear-gradient(90deg, transparent, rgba(13,124,95,0.3), transparent);
+}
 
 @layer components {
   .header-offset {
-    margin-top: 72px;
+    margin-top: 0;
   }
 
   .btn-primary {
-    @apply bg-primary text-white px-6 py-3 rounded font-bold transition-all duration-200 hover:bg-primary-dark hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2;
+    @apply px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2;
+    background-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 4px 20px rgba(13, 124, 95, 0.3);
+  }
+
+  .btn-primary:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(13, 124, 95, 0.4);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(13, 124, 95, 0.2);
   }
 
   .btn-secondary {
-    @apply bg-white text-primary border border-primary px-6 py-3 rounded font-bold transition-all duration-200 hover:bg-primary hover:text-white active:scale-[0.98] flex items-center justify-center gap-2;
+    @apply px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2;
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--color-primary);
+    color: white;
+    transform: translateY(-2px);
+  }
+
+  .btn-accent {
+    @apply px-6 py-3 rounded-xl font-bold transition-all duration-300 flex items-center justify-center gap-2;
+    background-color: var(--color-accent);
+    color: white;
+    box-shadow: 0 4px 20px rgba(13, 124, 95, 0.3);
+  }
+
+  .btn-accent:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(13, 124, 95, 0.4);
   }
 
   .card-container {
-    @apply bg-white border border-border rounded-lg;
+    @apply rounded-2xl;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
-  .progress-bar-bg {
-    @apply bg-border rounded;
+  .card-container:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
   }
-  
-  .progress-bar-fill {
-    @apply bg-primary rounded transition-all duration-500 ease-out;
+
+  .section-title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+  }
+
+  .section-subtitle {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+  }
+
+  /* Dark section variant */
+  .dark-section {
+    background-color: var(--color-dark-bg);
+    color: white;
+  }
+
+  .dark-section .section-title {
+    color: white;
+  }
+
+  .dark-section .section-subtitle {
+    color: rgba(255,255,255,0.6);
   }
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-primary-dark);
+}
+
+/* Hide scrollbar for specific elements */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
 .no-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Smooth focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom keyframe for parallax sections */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(13, 124, 95, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(13, 124, 95, 0.4); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
 }

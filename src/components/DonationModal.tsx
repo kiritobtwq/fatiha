@@ -67,51 +67,51 @@ export default function DonationModal({ isOpen, onClose }: DonationModalProps) {
     <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-md" onClick={onClose} />
 
-      <div className="relative bg-white w-full max-w-md rounded-[24px] shadow-2xl p-6 space-y-5">
+      <div className="relative w-full max-w-md rounded-3xl p-6 space-y-5" style={{ backgroundColor: 'var(--color-surface)', boxShadow: '0 25px 60px rgba(0, 0, 0, 0.15)' }}>
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-black text-[#1A1A1A]">Помочь сейчас</h2>
-          <button onClick={onClose} className="p-2 hover:bg-[#F2F2F7] rounded-full transition-colors">
-            <X size={20} className="text-[#8E8E93]" />
+          <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
+          <button onClick={onClose} className="p-2 rounded-xl transition-colors" style={{ color: 'var(--color-text-muted)' }}>
+            <X size={20} />
           </button>
         </div>
 
-        <div className="flex bg-[#F2F2F7] p-1 rounded-2xl">
-          <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-[14px] text-xs font-black transition-all ${!isRecurring ? 'bg-[#1C1C1E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Единоразово</button>
-          <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-[14px] text-xs font-black transition-all ${isRecurring ? 'bg-[#2ECC8E] text-white shadow-md' : 'text-[#8E8E93]'}`}>Регулярно</button>
+        <div className="flex p-1 rounded-xl" style={{ backgroundColor: '#f3f4f6' }}>
+          <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
+          <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
         </div>
 
         <div className="space-y-3">
-          <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-11 px-5 bg-white border border-[#E5E5EA] rounded-[22px] font-medium text-[#1A1A1A] focus:outline-none focus:border-[#2ECC8E] transition-all disabled:bg-[#F2F2F7] disabled:text-[#8E8E93] text-sm" />
-          <button onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-10 rounded-xl border text-xs font-bold transition-all ${isAnonymous ? 'bg-[#2ECC8E] border-[#2ECC8E] text-white' : 'border-[#E5E5EA] text-[#8E8E93] hover:border-[#C7C7CC]'}`}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
+          <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-10 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200 disabled:opacity-50" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+          <button onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-9 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
         </div>
 
-        <div className="space-y-3 border-b border-[#F2F2F7] pb-3">
+        <div className="space-y-3 pb-3" style={{ borderBottom: '1px solid #f3f4f6' }}>
           <div className="flex items-baseline gap-1.5">
             {isCustomMode ? (
-              <input type="text" inputMode="numeric" pattern="[0-9]*" value={customAmount} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setCustomAmount(v); setAmount(v); }} autoFocus placeholder="0" className="text-3xl font-black text-[#1A1A1A] bg-transparent border-none outline-none w-32 placeholder:text-[#C7C7CC]" />
+              <input type="text" inputMode="numeric" pattern="[0-9]*" value={customAmount} onChange={(e) => { const v = e.target.value.replace(/[^0-9]/g, ''); setCustomAmount(v); setAmount(v); }} autoFocus placeholder="0" className="text-2xl font-bold bg-transparent border-none outline-none w-28" style={{ color: 'var(--color-text)' }} />
             ) : (
-              <span className="text-3xl font-black text-[#1A1A1A]">{amount}</span>
+              <span className="text-2xl font-bold" style={{ color: 'var(--color-text)' }}>{amount}</span>
             )}
-            <span className="text-xl font-black text-[#C7C7CC]">₽</span>
+            <span className="text-lg" style={{ color: '#d1d5db' }}>₽</span>
           </div>
           <div className="flex gap-1.5 flex-wrap">
             {['500', '1000', '3000'].map((amt) => (
-              <button key={amt} onClick={() => { setAmount(amt); setCustomAmount(amt); setIsCustomMode(false); }} className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${!isCustomMode && amount === amt ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-[#E5E5EA]'}`}>{amt} ₽</button>
+              <button key={amt} onClick={() => { setAmount(amt); setCustomAmount(amt); setIsCustomMode(false); }} className="px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all duration-200" style={!isCustomMode && amount === amt ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }}>{amt} ₽</button>
             ))}
-            <button onClick={() => { setIsCustomMode(true); setCustomAmount(''); }} className={`px-3 py-1.5 rounded-xl text-[10px] font-black uppercase transition-all ${isCustomMode ? 'bg-[#1C1C1E] text-white' : 'bg-[#F2F2F7] text-[#8E8E93] hover:bg-[#E5E5EA]'}`}>Своя</button>
+            <button onClick={() => { setIsCustomMode(true); setCustomAmount(''); }} className="px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all duration-200" style={isCustomMode ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }}>Своя</button>
           </div>
         </div>
 
-        <button type="button" onClick={() => setConsentGiven(!consentGiven)} className={`w-full flex items-center gap-3 p-3 rounded-2xl border-2 transition-all text-left ${consentGiven ? 'border-[#2ECC8E] bg-[#F2FBF7]' : 'border-[#E5E5EA] hover:border-[#C7C7CC]'}`}>
-          <div className={`w-5 h-5 rounded-lg border-2 shrink-0 flex items-center justify-center transition-colors ${consentGiven ? 'bg-[#2ECC8E] border-[#2ECC8E]' : 'border-[#C7C7CC]'}`}>
+        <button type="button" onClick={() => setConsentGiven(!consentGiven)} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left" style={consentGiven ? { border: '1.5px solid var(--color-primary)', backgroundColor: 'rgba(26, 157, 108, 0.05)' } : { border: '1.5px solid #e5e7eb' }}>
+          <div className="w-5 h-5 rounded-md shrink-0 flex items-center justify-center transition-all duration-200" style={consentGiven ? { backgroundColor: 'var(--color-primary)', border: '1.5px solid var(--color-primary)' } : { border: '1.5px solid #d1d5db' }}>
             {consentGiven && <CheckCircle size={12} className="text-white" />}
           </div>
-          <span className="text-xs font-medium text-[#6B6B6B]">Согласие на обработку данных и <Link href="/public-offer" className="text-[#2ECC8E] font-bold hover:underline" onClick={(e) => e.stopPropagation()}>условия оферты</Link></span>
+          <span className="text-xs font-medium" style={{ color: '#6b7280' }}>Согласие на обработку данных и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }} onClick={(e) => e.stopPropagation()}>условия оферты</Link></span>
         </button>
 
-        {error && <div className="p-3 bg-red-50 text-red-600 text-sm font-bold rounded-xl text-center">{error}</div>}
+        {error && <div className="p-3 text-sm font-bold rounded-xl text-center" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{error}</div>}
 
-        <button onClick={handleDonateSubmit} disabled={isSubmitting} className="w-full h-12 bg-gradient-to-r from-[#2ECC8E] to-[#1FA870] text-white rounded-[18px] text-sm font-black shadow-xl shadow-emerald-100 hover:scale-[1.01] active:scale-[0.99] transition-all disabled:opacity-50 disabled:scale-100">
+        <button onClick={handleDonateSubmit} disabled={isSubmitting} className="w-full h-11 text-white rounded-xl text-sm font-bold transition-all duration-200 disabled:opacity-50" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 14px rgba(26, 157, 108, 0.3)' }}>
           {isSubmitting ? 'Обработка...' : 'Поддержать мечеть'}
         </button>
       </div>

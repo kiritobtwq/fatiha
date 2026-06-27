@@ -31,7 +31,7 @@ export default function EventsManagement({ events, setEvents, loadData }: Props)
     try {
       const fd = new FormData();
       fd.append('file', file);
-      const res = await fetch('/api/admin/upload', { method: 'POST', body: fd });
+      const res = await fetch('/api/admin/upload', { method: 'POST', credentials: 'include', body: fd });
       const data = await res.json();
       if (res.ok) setFormData(prev => ({ ...prev, imageUrl: data.url }));
       else alert(data.error || 'Ошибка загрузки');
@@ -45,20 +45,24 @@ export default function EventsManagement({ events, setEvents, loadData }: Props)
       const res = await fetch('/api/admin/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
       if (res.ok) {
         setFormData({ title: '', description: '', date: '', imageUrl: '' });
         setIsEditing(false);
         loadData();
+      } else {
+        const data = await res.json();
+        alert(data.error || 'Ошибка создания события');
       }
-    } catch (error) { console.error('Error creating event:', error); }
+    } catch (error) { console.error('Error creating event:', error); alert('Ошибка соединения'); }
   };
 
   const handleDelete = async (id: number) => {
     if (!confirm('Удалить событие?')) return;
     try {
-      const res = await fetch(`/api/admin/events?id=${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/events?id=${id}`, { method: 'DELETE', credentials: 'include' });
       if (res.ok) loadData();
     } catch (error) { console.error('Error deleting event:', error); }
   };
@@ -87,14 +91,16 @@ export default function EventsManagement({ events, setEvents, loadData }: Props)
       const res = await fetch('/api/admin/events', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ ...formData, id: editingEvent.id }),
       });
       if (res.ok) { setEditingEvent(null); setIsEditing(false); setFormData({ title: '', description: '', date: '', imageUrl: '' }); loadData(); }
-    } catch (error) { console.error('Error updating event:', error); }
+      else { const data = await res.json(); alert(data.error || 'Ошибка обновления'); }
+    } catch (error) { console.error('Error updating event:', error); alert('Ошибка соединения'); }
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-20">
       <div className="flex items-center justify-between">
         <h1 className="font-display font-bold text-3xl text-slate-800">События</h1>
         <button onClick={() => setIsEditing(true)} className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary-dark transition-colors">

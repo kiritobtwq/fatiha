@@ -38,6 +38,7 @@ export default function ScheduleManagement() {
       const res = await fetch('/api/admin/schedule', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ date, ...times }),
       });
 
@@ -55,7 +56,7 @@ export default function ScheduleManagement() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-20">
       <div className="flex items-center justify-between">
         <h1 className="font-display font-bold text-3xl text-slate-800">Расписание намазов</h1>
         <button

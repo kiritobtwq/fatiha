@@ -6,7 +6,7 @@ export async function GET(request: Request) {
   try {
     await verifyAuth(request);
     const images = await (prisma as any).galleryImage.findMany({
-      orderBy: { createdAt: 'desc' },
+      orderBy: { order: 'asc' },
     });
     return NextResponse.json(images);
   } catch (error: any) {
@@ -35,6 +35,30 @@ export async function POST(request: Request) {
     return NextResponse.json(image);
   } catch (error: any) {
     console.error('Create gallery image error:', error);
+    if (error.message === 'Unauthorized' || error.message === 'Invalid token') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+export async function PUT(request: Request) {
+  try {
+    await verifyAuth(request);
+    const body = await request.json();
+    const { id, order } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: 'Missing id' }, { status: 400 });
+    }
+
+    const image = await (prisma as any).galleryImage.update({
+      where: { id: parseInt(id) },
+      data: { order },
+    });
+
+    return NextResponse.json(image);
+  } catch (error: any) {
     if (error.message === 'Unauthorized' || error.message === 'Invalid token') {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }

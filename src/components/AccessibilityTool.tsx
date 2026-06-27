@@ -27,56 +27,53 @@ export default function AccessibilityTool() {
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-16 h-16 bg-primary text-white rounded-full shadow-lg flex items-center justify-center hover:scale-110 transition-transform focus:outline-none focus:ring-4 focus:ring-primary/20"
+        className="w-14 h-14 text-white rounded-full flex items-center justify-center transition-all duration-200 focus:outline-none focus:ring-4"
+        style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 14px rgba(26, 157, 108, 0.3)' }}
         title="Версия для слабовидящих"
       >
-        <Eye size={32} />
+        <Eye size={24} />
       </button>
 
       {/* Menu */}
       {isOpen && (
-        <div className="absolute bottom-16 left-0 w-72 bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 space-y-6 animate-in slide-in-from-bottom-4 fade-in duration-200">
+        <div className="absolute bottom-16 left-0 w-72 rounded-2xl p-5 space-y-5" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)', boxShadow: '0 20px 50px rgba(0, 0, 0, 0.12)' }}>
           <div className="flex items-center justify-between">
-            <h3 className="font-bold text-slate-800">Доступность</h3>
-            <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-slate-600">
-              <X size={20} />
+            <h3 className="font-bold text-sm" style={{ color: 'var(--color-text)' }}>Доступность</h3>
+            <button onClick={() => setIsOpen(false)} className="p-1 rounded-lg transition-colors" style={{ color: 'var(--color-text-muted)' }}>
+              <X size={18} />
             </button>
           </div>
 
           {/* Font Size Toggle */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-bold text-slate-500">
+            <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
               <Type size={16} /> Размер шрифта
             </div>
             <button
               onClick={() => setIsLargeFont(!isLargeFont)}
-              className={`w-12 h-6 rounded-full transition-colors relative ${
-                isLargeFont ? 'bg-primary' : 'bg-slate-200'
-              }`}
+              className="w-11 h-6 rounded-full transition-colors relative duration-200"
+              style={{ backgroundColor: isLargeFont ? 'var(--color-primary)' : '#e5e7eb' }}
             >
               <div
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                  isLargeFont ? 'left-7' : 'left-1'
-                }`}
+                className="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
+                style={{ transform: isLargeFont ? 'translateX(20px)' : 'translateX(4px)' }}
               />
             </button>
           </div>
 
           {/* High Contrast */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-bold text-slate-500">
+            <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
               <Contrast size={16} /> Высокий контраст
             </div>
             <button
               onClick={() => setIsHighContrast(!isHighContrast)}
-              className={`w-12 h-6 rounded-full transition-colors relative ${
-                isHighContrast ? 'bg-primary' : 'bg-slate-200'
-              }`}
+              className="w-11 h-6 rounded-full transition-colors relative duration-200"
+              style={{ backgroundColor: isHighContrast ? 'var(--color-primary)' : '#e5e7eb' }}
             >
               <div
-                className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-transform ${
-                  isHighContrast ? 'left-7' : 'left-1'
-                }`}
+                className="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
+                style={{ transform: isHighContrast ? 'translateX(20px)' : 'translateX(4px)' }}
               />
             </button>
           </div>
@@ -84,7 +81,8 @@ export default function AccessibilityTool() {
           {/* Reset */}
           <button
             onClick={reset}
-            className="w-full py-2 bg-slate-50 text-slate-500 text-xs font-bold rounded-lg flex items-center justify-center gap-2 hover:bg-slate-100 transition-colors"
+            className="w-full py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-2 transition-colors duration-200"
+            style={{ backgroundColor: '#f3f4f6', color: 'var(--color-text-secondary)' }}
           >
             <RotateCcw size={14} /> Сбросить настройки
           </button>

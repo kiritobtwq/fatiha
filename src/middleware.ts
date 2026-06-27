@@ -1,19 +1,16 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import { jwtVerify } from 'jose';
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const secretPath = process.env.ADMIN_SECRET_PATH || 'admin';
 
-  // Redirect /admin/* to secret path
-  if (pathname.startsWith('/admin')) {
-    const rest = pathname.replace('/admin', '') || '';
-    return NextResponse.redirect(new URL(`/${secretPath}${rest}`, request.url));
+  if (pathname.startsWith('/admin') && !pathname.startsWith('/api')) {
+    return NextResponse.redirect(new URL('/', request.url));
   }
 
-  // Protect secret admin routes
-  if (pathname.startsWith(`/${secretPath}`)) {
-    // Allow login page
+  if (pathname.startsWith(`/${secretPath}`) && !pathname.startsWith('/api')) {
     if (pathname === `/${secretPath}/login`) {
       return NextResponse.next();
     }
@@ -30,7 +27,6 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`/${secretPath}/login`, request.url));
       }
 
-      const { jwtVerify } = require('jose');
       const secret = new TextEncoder().encode(jwtSecret);
       await jwtVerify(token, secret);
     } catch {
@@ -40,3 +36,7 @@ export async function middleware(request: NextRequest) {
 
   return NextResponse.next();
 }
+
+export const config = {
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|media/).*)'],
+};

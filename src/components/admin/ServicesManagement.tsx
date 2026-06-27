@@ -28,6 +28,7 @@ export default function ServicesManagement({ services, setServices, loadData }: 
       const res = await fetch('/api/admin/services', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify(formData),
       });
 
@@ -49,6 +50,7 @@ export default function ServicesManagement({ services, setServices, loadData }: 
       const res = await fetch('/api/admin/services', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ ...formData, id: editingService.id }),
       });
 
@@ -68,7 +70,7 @@ export default function ServicesManagement({ services, setServices, loadData }: 
 
     try {
       const res = await fetch(`/api/admin/services?id=${id}`, {
-        method: 'DELETE',
+        method: 'DELETE', credentials: 'include',
       });
 
       if (res.ok) {
@@ -96,7 +98,7 @@ export default function ServicesManagement({ services, setServices, loadData }: 
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-20">
       <div className="flex items-center justify-between">
         <h1 className="font-display font-bold text-3xl text-slate-800">Услуги</h1>
         <button

@@ -27,7 +27,7 @@ export default function SettingsManagement() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-20">
       <h1 className="font-display font-bold text-3xl text-slate-800">Настройки сайта</h1>
 
       <div className="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 space-y-6">

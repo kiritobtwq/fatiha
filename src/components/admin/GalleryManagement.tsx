@@ -7,6 +7,7 @@ interface GalleryImage {
   id: number;
   url: string;
   description: string | null;
+  order?: number;
   createdAt: string;
 }
 
@@ -20,6 +21,7 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
   const [isAdding, setIsAdding] = useState(false);
   const [formData, setFormData] = useState({ url: '', description: '' });
   const [isUploading, setIsUploading] = useState(false);
+  const [uploadedUrl, setUploadedUrl] = useState('');
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -32,14 +34,16 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
 
       const res = await fetch('/api/admin/upload', {
         method: 'POST',
+        credentials: 'include',
         body: uploadFormData,
       });
 
       const data = await res.json();
       if (res.ok) {
+        setUploadedUrl(data.url);
         setFormData({ ...formData, url: data.url });
       } else {
-        alert(data.error || 'Ошибка загрузки изображения');
+        alert(data.error || 'Ошибка загрузки');
       }
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -51,20 +55,31 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
 
   const handleAdd = async (e: React.FormEvent) => {
     e.preventDefault();
+    const url = uploadedUrl || formData.url;
+    if (!url) {
+      alert('Загрузите файл или вставьте URL');
+      return;
+    }
     try {
       const res = await fetch('/api/admin/gallery', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        credentials: 'include',
+        body: JSON.stringify({ url, description: formData.description }),
       });
 
+      const data = await res.json();
       if (res.ok) {
         setFormData({ url: '', description: '' });
+        setUploadedUrl('');
         setIsAdding(false);
         loadData();
+      } else {
+        alert(data.error || 'Ошибка добавления');
       }
     } catch (error) {
       console.error('Error adding image:', error);
+      alert('Ошибка соединения');
     }
   };
 
@@ -74,22 +89,57 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
     try {
       const res = await fetch(`/api/admin/gallery?id=${id}`, {
         method: 'DELETE',
+        credentials: 'include',
       });
 
+      const data = await res.json();
       if (res.ok) {
         loadData();
+      } else {
+        alert(data.error || 'Ошибка удаления');
       }
     } catch (error) {
       console.error('Error deleting image:', error);
+      alert('Ошибка соединения');
     }
   };
 
+  const handleMove = async (id: number, direction: 'up' | 'down' | 'first' | 'last') => {
+    const currentIndex = gallery.findIndex(img => img.id === id);
+    if (currentIndex === -1) return;
+
+    let swapIndex = -1;
+    if (direction === 'up') swapIndex = currentIndex - 1;
+    if (direction === 'down') swapIndex = currentIndex + 1;
+    if (direction === 'first') swapIndex = 0;
+    if (direction === 'last') swapIndex = gallery.length - 1;
+
+    if (swapIndex < 0 || swapIndex >= gallery.length || swapIndex === currentIndex) return;
+
+    const currentOrder = gallery[currentIndex].order ?? currentIndex;
+    const swapOrder = gallery[swapIndex].order ?? swapIndex;
+
+    await fetch('/api/admin/gallery', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ id: gallery[swapIndex].id, order: currentOrder }),
+    });
+    await fetch('/api/admin/gallery', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify({ id, order: swapOrder }),
+    });
+    loadData();
+  };
+
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-20">
       <div className="flex items-center justify-between">
         <h1 className="font-display font-bold text-3xl text-slate-800">Галерея</h1>
         <button
-          onClick={() => setIsAdding(true)}
+          onClick={() => { setIsAdding(true); setFormData({ url: '', description: '' }); setUploadedUrl(''); }}
           className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-xl font-bold hover:bg-primary-dark transition-colors"
         >
           <Plus size={18} />
@@ -110,19 +160,17 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-2">Загрузить изображение</label>
               <div className="space-y-3">
-                <div className="flex items-center gap-3">
-                  <label className="flex items-center gap-2 px-4 py-3 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-primary transition-colors">
-                    <Upload size={20} className="text-slate-400" />
-                    <span className="text-sm text-slate-600">Выбрать файл</span>
-                    <input
-                      type="file"
-                      accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                    />
-                  </label>
-                  {isUploading && <span className="text-sm text-slate-500">Загрузка...</span>}
-                </div>
+                <label className="flex items-center gap-2 px-4 py-3 bg-slate-50 border-2 border-dashed border-slate-300 rounded-xl cursor-pointer hover:border-primary transition-colors">
+                  <Upload size={20} className="text-slate-400" />
+                  <span className="text-sm text-slate-600">{isUploading ? 'Загрузка...' : 'Выбрать файл'}</span>
+                  <input
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    disabled={isUploading}
+                  />
+                </label>
                 <div className="text-center text-sm text-slate-400">или</div>
                 <input
                   type="url"
@@ -130,13 +178,12 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
                   onChange={(e) => setFormData({ ...formData, url: e.target.value })}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary"
                   placeholder="Вставить URL изображения"
-                  required
                 />
               </div>
-              {formData.url && (
+              {(formData.url || uploadedUrl) && (
                 <div className="mt-3">
                   <img
-                    src={formData.url}
+                    src={uploadedUrl || formData.url}
                     alt="Предпросмотр"
                     className="max-h-48 rounded-lg object-cover mx-auto"
                   />
@@ -173,21 +220,18 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
         </div>
       )}
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.isArray(gallery) && gallery.length > 0 ? gallery.map((image) => (
           <div key={image.id} className="group relative bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="aspect-square">
               <img
                 src={image.url}
-                alt={image.description || 'Изображение галереи'}
+                alt={image.description || 'Фото'}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
             </div>
             <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-              <button
-                onClick={() => handleDelete(image.id)}
-                className="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors"
-              >
+              <button onClick={() => handleDelete(image.id)} className="p-3 bg-red-500 text-white rounded-xl hover:bg-red-600 transition-colors">
                 <Trash2 size={20} />
               </button>
             </div>
@@ -199,7 +243,7 @@ export default function GalleryManagement({ gallery, setGallery, loadData }: Pro
           </div>
         )) : (
           <div className="col-span-full text-center py-12">
-            <p className="text-slate-500">Нет изображений. Нажмите "Добавить изображение" чтобы загрузить первое изображение.</p>
+            <p className="text-slate-500">Нет изображений. Нажмите "Добавить" чтобы загрузить.</p>
           </div>
         )}
       </div>
