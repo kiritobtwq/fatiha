@@ -1,25 +1,13 @@
 # Мечеть Фатиха
 
-## Запуск
+Сайт сбора средств на реконструкцию мечети в г. Бирск
 
-```bash
-git clone https://github.com/kiritobtwq/fatiha.git
-cd fatiha
-npm install
-psql -U postgres -c "CREATE DATABASE alfatiha_db;"
-npx prisma db push
-npx prisma db seed
-npm run dev
-```
+**Ссылка:** https://fatiha-mechet.vercel.app
 
-http://localhost:3000
+## Переменные окружения
 
-## ngrok
-
-```bash
-ngrok http 3000
-```
+Смена переменных в Vercel
 
 ## Технологии
 
-Next.js 14, React, Tailwind CSS, PostgreSQL, Prisma, YooKassa
+Next.js 15, React 18, Tailwind CSS, PostgreSQL (Neon), Prisma, YooKassa, Cloudinary, adhan
