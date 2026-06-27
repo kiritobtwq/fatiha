@@ -144,7 +144,7 @@ export default function AdminDashboardPage() {
 
   const handleLogout = async () => {
     await fetch('/api/admin/logout', { method: 'POST' });
-    window.location.href = '/alfatiha-secure-panel-2024x9k/login';
+    window.location.href = '/alfatiha-admin-portal-9k2x4/login';
   };
 
   const handleDeleteContact = async (id: string) => {

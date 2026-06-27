@@ -29,7 +29,7 @@ export default function AdminLoginPage() {
         throw new Error(data.error || 'Login failed');
       }
 
-      router.push('/alfatiha-secure-panel-2024x9k');
+      router.push('/alfatiha-admin-portal-9k2x4');
     } catch (err: any) {
       setError(err.message);
     } finally {
