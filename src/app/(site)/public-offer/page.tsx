@@ -35,7 +35,7 @@ export default function PublicOfferPage() {
             <h2 className="font-display font-bold text-xl text-text-primary mb-4">3. Порядок совершения Пожертвования</h2>
             <ul className="text-text-secondary leading-relaxed space-y-2 list-disc pl-5">
               <li>Жертвователь определяет сумму Пожертвования самостоятельно</li>
-              <li>Оплата производится через платёжную систему ЮKassa или СБП</li>
+              <li>Оплата производится через платёжную систему ЮKassa</li>
               <li>Пожертвование считается совершённым с момента зачисления денежных средств</li>
               <li>Жертвователь подтверждает согласие с условиями настоящей Оферты при оплате</li>
             </ul>

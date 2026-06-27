@@ -404,12 +404,11 @@ export default function Home() {
         }),
       });
 
-      if (res.ok) {
-        window.open('https://qr.nspk.ru/AS1A001RM6B8DC269O4R2PCTEJJRBAI0?type=01&bank=100000000111&crc=70AD', '_blank');
-        fetchStats();
-        loadDonations(donationLimit, 0);
+      const data = await res.json();
+      if (data.confirmationUrl) {
+        window.location.href = data.confirmationUrl;
       } else {
-        setWidgetError('Попробуйте ещё раз');
+        setWidgetError(data.error || 'Попробуйте ещё раз');
       }
     } catch (err) {
       setWidgetError('Проверьте подключение к интернету');
@@ -569,7 +568,7 @@ export default function Home() {
                 </button>
                 {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
                 <button onClick={handleDonateSubmit} className="w-full h-16 text-white rounded-2xl text-base font-bold transition-all duration-300 hover:shadow-lg" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
-                  Оплатить через СБП
+                  Оплатить через ЮKassa
                 </button>
               </div>
             </motion.div>
@@ -614,7 +613,7 @@ export default function Home() {
           </button>
           {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
           <button onClick={handleDonateSubmit} className="w-full h-14 text-white rounded-2xl text-base font-bold transition-all duration-300" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
-            Оплатить через СБП
+            Оплатить через ЮKassa
           </button>
           </div>
       </section>

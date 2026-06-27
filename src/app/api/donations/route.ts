@@ -2,10 +2,14 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 import { rateLimit } from '@/lib/rateLimit';
+import { createPayment } from '@/lib/yookassa';
+import { config } from '@/config';
 
 const donationSchema = z.object({
   amount: z.number().min(0).max(1_000_000),
   donorName: z.string().max(100).optional(),
+  isRecurring: z.boolean().optional(),
+  recurringPeriod: z.string().nullable().optional(),
 });
 
 export async function GET(request: Request) {
@@ -65,18 +69,36 @@ export async function POST(request: Request) {
 
     const body = await request.json();
     const validatedData = donationSchema.parse(body);
-    const { amount, donorName = 'Аноним' } = validatedData;
+    const { amount, donorName = 'Аноним', isRecurring = false, recurringPeriod = null } = validatedData;
 
     const donation = await prisma.donation.create({
       data: {
         amount: Number(amount),
         donorName,
         donorEmail: '',
-        status: 'succeeded',
+        status: 'pending',
+        isRecurring,
+        recurringPeriod,
       },
     });
 
-    return NextResponse.json({ ok: true, id: donation.id });
+    const origin = request.headers.get('origin') || 'http://localhost:3000';
+    const payment = await createPayment({
+      amount: Number(amount),
+      description: 'Пожертвование в мечеть «Фатиха»',
+      donationId: donation.id,
+      returnUrl: config.yookassa.returnUrl || `${origin}/donate/success`,
+    });
+
+    await prisma.donation.update({
+      where: { id: donation.id },
+      data: { yookassaPaymentId: payment.id },
+    });
+
+    return NextResponse.json({
+      confirmationUrl: payment.confirmation.confirmation_url,
+      id: donation.id,
+    });
   } catch (error) {
     console.error('Error creating donation:', error);
     if (error instanceof z.ZodError) {
