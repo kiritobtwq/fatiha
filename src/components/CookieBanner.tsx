@@ -32,13 +32,15 @@ export default function CookieBanner() {
           </div>
           <div className="flex items-center gap-3">
             <button
+              aria-label="Принять cookie"
               onClick={handleAccept}
-              className="px-6 py-2 text-white rounded-xl font-bold text-sm transition-colors whitespace-nowrap"
+              className="px-6 py-2 text-white rounded-xl font-bold text-sm transition-colors whitespace-nowrap min-h-[44px]"
               style={{ backgroundColor: 'var(--color-primary)' }}
             >
               Принять
             </button>
             <button
+              aria-label="Закрыть уведомление"
               onClick={() => setIsVisible(false)}
               className="p-2 transition-colors"
               style={{ color: 'rgba(255,255,255,0.5)' }}

@@ -488,7 +488,7 @@ export default function Home() {
         {/* Background image */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/media/Главный_план.jpg"
+            src="/media/Главный_план.webp"
             alt="Мечеть Фатиха"
             fill
             sizes="100vw"
@@ -610,13 +610,13 @@ export default function Home() {
                 <h2 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
 
                 <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
-                  <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
-                  <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
+                  <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
+                  <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
                 </div>
 
                 <div className="space-y-3 mb-4">
                   <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; e.currentTarget.style.boxShadow = '0 0 0 3px rgba(13, 124, 95, 0.1)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; e.currentTarget.style.boxShadow = 'none'; }} />
-                  <button onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-10 rounded-xl border text-xs font-bold transition-all duration-200`} style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
+                  <button aria-label={isAnonymous ? 'Отменить анонимность' : 'Пожертвовать анонимно'} onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-11 rounded-xl border text-xs font-bold transition-all duration-200`} style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
                 </div>
 
                 {isRecurring && (
@@ -631,17 +631,17 @@ export default function Home() {
                   <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Сумма (₽)</label>
                   <div className="flex gap-2 flex-wrap mb-2">
                     {['500', '1000', '3000', '5000'].map((amt) => (
-                      <button key={amt} type="button" onClick={() => setDonateAmount(amt)} className="px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-200" style={donateAmount === amt ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }}>{amt} ₽</button>
+                      <button key={amt} type="button" aria-label={`${amt} рублей`} onClick={() => setDonateAmount(amt)} className="px-4 py-2 rounded-lg text-xs font-bold transition-all duration-200 min-h-[44px]" style={donateAmount === amt ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }}>{amt} ₽</button>
                     ))}
                   </div>
                   <input type="text" inputMode="numeric" value={donateAmount} onChange={(e) => setDonateAmount(e.target.value.replace(/[^0-9]/g, ''))} placeholder="Своя сумма" className="w-full h-10 px-3 bg-white rounded-xl text-sm font-medium" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; }} />
                 </div>
-                <button type="button" onClick={() => setConsentGiven(!consentGiven)} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left mb-4" style={consentGiven ? { border: '1.5px solid var(--color-primary)', backgroundColor: 'rgba(13, 124, 95, 0.05)' } : { border: '1.5px solid #e5e7eb' }}>
+                <button type="button" aria-label={consentGiven ? 'Согласие дано' : 'Дать согласие на обработку данных'} onClick={() => setConsentGiven(!consentGiven)} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left mb-4 min-h-[44px]" style={consentGiven ? { border: '1.5px solid var(--color-primary)', backgroundColor: 'rgba(13, 124, 95, 0.05)' } : { border: '1.5px solid #e5e7eb' }}>
                   <div className="w-5 h-5 rounded-md shrink-0 flex items-center justify-center transition-all duration-200" style={consentGiven ? { backgroundColor: 'var(--color-primary)', border: '1.5px solid var(--color-primary)' } : { border: '1.5px solid #d1d5db' }}>{consentGiven && <CheckCircle size={12} className="text-white" />}</div>
-                  <span className="text-xs font-medium" style={{ color: '#6b7280' }}>Согласие на обработку данных и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
+                  <span className="text-xs font-medium" style={{ color: '#4b5563' }}>Согласие на обработку данных и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
                 </button>
                 {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
-                <button onClick={handleDonateSubmit} className="w-full h-16 text-white rounded-2xl text-base font-bold transition-all duration-300 hover:shadow-lg" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
+                <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'} onClick={handleDonateSubmit} className="w-full h-16 text-white rounded-2xl text-base font-bold transition-all duration-300 hover:shadow-lg min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
                   {isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'}
                 </button>
               </div>
@@ -670,13 +670,13 @@ export default function Home() {
           <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
 
           <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
-            <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
-            <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
+            <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
+            <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
           </div>
 
           <div className="space-y-3 mb-4">
             <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-10 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200 disabled:opacity-50" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; }} />
-            <button onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-9 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
+            <button aria-label={isAnonymous ? 'Отменить анонимность' : 'Пожертвовать анонимно'} onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-11 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
           </div>
 
           {isRecurring && (
@@ -696,12 +696,12 @@ export default function Home() {
             </div>
             <input type="text" inputMode="numeric" value={donateAmount} onChange={(e) => setDonateAmount(e.target.value.replace(/[^0-9]/g, ''))} placeholder="Своя сумма" className="w-full h-9 px-3 bg-white rounded-xl text-sm font-medium" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; }} />
           </div>
-          <button type="button" onClick={() => setConsentGiven(!consentGiven)} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left mb-4" style={consentGiven ? { border: '1.5px solid var(--color-primary)', backgroundColor: 'rgba(13, 124, 95, 0.05)' } : { border: '1.5px solid #e5e7eb' }}>
+          <button type="button" aria-label={consentGiven ? 'Согласие дано' : 'Дать согласие на обработку данных'} onClick={() => setConsentGiven(!consentGiven)} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left mb-4 min-h-[44px]" style={consentGiven ? { border: '1.5px solid var(--color-primary)', backgroundColor: 'rgba(13, 124, 95, 0.05)' } : { border: '1.5px solid #e5e7eb' }}>
             <div className="w-5 h-5 rounded-md shrink-0 flex items-center justify-center transition-all duration-200" style={consentGiven ? { backgroundColor: 'var(--color-primary)', border: '1.5px solid var(--color-primary)' } : { border: '1.5px solid #d1d5db' }}>{consentGiven && <CheckCircle size={12} className="text-white" />}</div>
-            <span className="text-xs font-medium" style={{ color: '#6b7280' }}>Согласие и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
+            <span className="text-xs font-medium" style={{ color: '#4b5563' }}>Согласие и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
           </button>
           {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
-          <button onClick={handleDonateSubmit} className="w-full h-14 text-white rounded-2xl text-base font-bold transition-all duration-300" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
+          <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'} onClick={handleDonateSubmit} className="w-full h-14 text-white rounded-2xl text-base font-bold transition-all duration-300 min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
             {isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'}
           </button>
           </div>
@@ -713,10 +713,10 @@ export default function Home() {
       <IslamicPatternDivider />
       <section ref={aboutRef} className="py-20 md:py-28 relative overflow-hidden">
         <div className="hidden min-[1800px]:block absolute left-12 top-20 w-80 pointer-events-none">
-          <Image src="/media/Имам-Хатыб-Photoroom.png" alt="" width={512} height={512} className="w-full h-auto object-contain" />
+          <Image src="/media/Имам-Хатыб-Photoroom.webp" alt="" width={512} height={512} className="w-full h-auto object-contain" />
         </div>
         <div className="hidden min-[1800px]:block absolute right-12 top-20 w-80 pointer-events-none">
-          <Image src="/media/Имам-Ахунд-Photoroom.png" alt="" width={512} height={512} className="w-full h-auto object-contain" />
+          <Image src="/media/Имам-Ахунд-Photoroom.webp" alt="" width={512} height={512} className="w-full h-auto object-contain" />
         </div>
         <div className="container mx-auto px-4 max-w-4xl relative z-10">
           <motion.div
@@ -913,15 +913,15 @@ export default function Home() {
             </div>
             {galleryPhotos.length > 3 && (
               <>
-                <button onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-xl z-10 transition-all duration-300 hover:scale-110">
+                <button aria-label="Предыдущие фото" onClick={prevSlide} className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-xl z-10 transition-all duration-300 hover:scale-110">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#0f1a14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
-                <button onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-xl z-10 transition-all duration-300 hover:scale-110">
+                <button aria-label="Следующие фото" onClick={nextSlide} className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/80 hover:bg-white rounded-full flex items-center justify-center shadow-xl z-10 transition-all duration-300 hover:scale-110">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#0f1a14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
                   {Array.from({ length: Math.ceil(galleryPhotos.length / 3) }).map((_, i) => (
-                    <button key={i} onClick={() => setCurrentSlide(i * 3)} className={`h-2 rounded-full transition-all duration-300 ${Math.floor(currentSlide / 3) === i ? 'bg-[var(--color-primary)] w-8' : 'bg-white/40 w-2 hover:bg-white/60'}`} />
+                    <button key={i} aria-label={`Перейти к группе фото ${i + 1}`} onClick={() => setCurrentSlide(i * 3)} className={`h-2 rounded-full transition-all duration-300 ${Math.floor(currentSlide / 3) === i ? 'bg-[var(--color-primary)] w-8' : 'bg-white/40 w-2 hover:bg-white/60'}`} />
                   ))}
                 </div>
               </>
@@ -947,15 +947,15 @@ export default function Home() {
                     </div>
                   ))}
                 </div>
-                <button onClick={prevSlide} className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10 transition-all duration-200">
+                <button aria-label="Предыдущее фото" onClick={prevSlide} className="absolute left-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/70 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10 transition-all duration-200">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="#0f1a14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
-                <button onClick={nextSlide} className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/70 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10 transition-all duration-200">
+                <button aria-label="Следующее фото" onClick={nextSlide} className="absolute right-3 top-1/2 -translate-y-1/2 w-11 h-11 bg-white/70 hover:bg-white rounded-full flex items-center justify-center shadow-lg z-10 transition-all duration-200">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="#0f1a14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
                 <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                   {galleryPhotos.map((_, i) => (
-                    <button key={i} className={`h-1.5 rounded-full transition-all duration-300 ${(currentSlide % galleryPhotos.length) === i ? 'bg-white w-5' : 'bg-white/40 w-1.5'}`} />
+                    <button key={i} aria-label={`Перейти к фото ${i + 1}`} className={`h-1.5 rounded-full transition-all duration-300 ${(currentSlide % galleryPhotos.length) === i ? 'bg-white w-5' : 'bg-white/40 w-1.5'}`} />
                   ))}
                 </div>
               </>
@@ -975,10 +975,10 @@ export default function Home() {
                 onTouchMove={handleTouchMove}
                 onTouchEnd={() => { const diff = touchStartX.current - touchEndX.current; if (Math.abs(diff) > 50) { if (diff > 0) nextLightbox(); else prevLightbox(); } }}
               >
-                <button className="absolute top-6 right-6 text-white/60 hover:text-white z-10 p-2 transition-colors" onClick={() => setLightboxPhoto(null)}>
+                <button aria-label="Закрыть" className="absolute top-6 right-6 text-white/60 hover:text-white z-10 p-2 transition-colors" onClick={() => setLightboxPhoto(null)}>
                   <X size={32} />
                 </button>
-                <button className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white z-10 transition-all duration-200" onClick={prevLightbox}>
+                <button aria-label="Предыдущее фото" className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white z-10 transition-all duration-200" onClick={prevLightbox}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M15 18l-6-6 6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
                 <motion.div
@@ -989,7 +989,7 @@ export default function Home() {
                 >
                   <Image src={lightboxPhoto.src} alt={lightboxPhoto.alt} fill className="object-contain" />
                 </motion.div>
-                <button className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white z-10 transition-all duration-200" onClick={nextLightbox}>
+                <button aria-label="Следующее фото" className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/10 hover:bg-white/20 rounded-full flex items-center justify-center text-white z-10 transition-all duration-200" onClick={nextLightbox}>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9 18l6-6-6-6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 </button>
                 <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-sm font-bold bg-black/40 px-4 py-2 rounded-full backdrop-blur-sm">
@@ -1109,7 +1109,7 @@ export default function Home() {
               </motion.div>
             )}
             <div className="text-center">
-              <button onClick={loadMoreDonations} disabled={isLoadingMore} className="px-10 py-3.5 rounded-2xl font-bold text-[10px] uppercase tracking-widest transition-all duration-300 disabled:opacity-50 bg-white/10 text-white hover:bg-white/20 border border-white/10">
+              <button aria-label={isLoadingMore ? 'Загрузка...' : 'Загрузить ещё пожертвования'} onClick={loadMoreDonations} disabled={isLoadingMore} className="px-10 py-3.5 rounded-2xl font-bold text-[10px] uppercase tracking-widest transition-all duration-300 disabled:opacity-50 bg-white/10 text-white hover:bg-white/20 border border-white/10">
                 {isLoadingMore ? <RefreshCw className="animate-spin mr-2 inline" size={14} /> : null} Загрузить ещё
               </button>
             </div>
@@ -1136,8 +1136,8 @@ export default function Home() {
 
           <div className="grid grid-cols-2 gap-6 md:gap-8 max-w-lg md:max-w-xl mx-auto">
             {[
-              { name: 'имам-хатыб', image: '/media/Имам-Хатыб.jpg' },
-              { name: 'имам-ахунд', image: '/media/Имам-Ахунд.jpg' },
+              { name: 'имам-хатыб', image: '/media/Имам-Хатыб.webp' },
+              { name: 'имам-ахунд', image: '/media/Имам-Ахунд.webp' },
             ].map((member, i) => (
               <motion.div
                 key={i}
@@ -1180,7 +1180,7 @@ export default function Home() {
                 </h2>
               </div>
               {events.length > 0 && (
-                <button onClick={() => setShowAllEvents(!showAllEvents)} className="font-bold flex items-center gap-1 uppercase text-[10px] tracking-widest text-[var(--color-accent)]">
+                <button aria-label={showAllEvents ? 'Свернуть список событий' : 'Показать все события'} onClick={() => setShowAllEvents(!showAllEvents)} className="font-bold flex items-center gap-1 uppercase text-[10px] tracking-widest text-[var(--color-accent)]">
                   {showAllEvents ? 'Свернуть' : 'Все'} <ChevronRight size={12} className={`transition-transform duration-200 ${showAllEvents ? 'rotate-90' : ''}`} />
                 </button>
               )}

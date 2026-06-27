@@ -70,19 +70,19 @@ export default function DonationModal({ isOpen, onClose }: DonationModalProps) {
       <div className="relative w-full max-w-md rounded-3xl p-6 space-y-5" style={{ backgroundColor: 'var(--color-surface)', boxShadow: '0 25px 60px rgba(0, 0, 0, 0.15)' }}>
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-bold" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
-          <button onClick={onClose} className="p-2 rounded-xl transition-colors" style={{ color: 'var(--color-text-muted)' }}>
+          <button aria-label="Закрыть" onClick={onClose} className="p-2 rounded-xl transition-colors" style={{ color: 'var(--color-text-muted)' }}>
             <X size={20} />
           </button>
         </div>
 
         <div className="flex p-1 rounded-xl" style={{ backgroundColor: '#f3f4f6' }}>
-          <button onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
-          <button onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
+          <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500'}`}>Единоразово</button>
+          <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-500'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
         </div>
 
         <div className="space-y-3">
           <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-10 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200 disabled:opacity-50" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; }} />
-          <button onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-9 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
+          <button aria-label={isAnonymous ? 'Отменить анонимность' : 'Пожертвовать анонимно'} onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-11 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#6b7280' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
         </div>
 
         <div className="space-y-3 pb-3" style={{ borderBottom: '1px solid #f3f4f6' }}>
@@ -96,22 +96,22 @@ export default function DonationModal({ isOpen, onClose }: DonationModalProps) {
           </div>
           <div className="flex gap-1.5 flex-wrap">
             {['500', '1000', '3000'].map((amt) => (
-              <button key={amt} onClick={() => { setAmount(amt); setCustomAmount(amt); setIsCustomMode(false); }} className="px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all duration-200" style={!isCustomMode && amount === amt ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }}>{amt} ₽</button>
+              <button key={amt} aria-label={`${amt} рублей`} onClick={() => { setAmount(amt); setCustomAmount(amt); setIsCustomMode(false); }} className="px-4 py-2 rounded-lg text-[10px] font-bold transition-all duration-200 min-h-[44px]" style={!isCustomMode && amount === amt ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#6b7280' }}>{amt} ₽</button>
             ))}
-            <button onClick={() => { setIsCustomMode(true); setCustomAmount(''); }} className="px-3 py-1.5 rounded-lg text-[10px] font-bold transition-all duration-200" style={isCustomMode ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#9ca3af' }}>Своя</button>
+            <button aria-label="Своя сумма" onClick={() => { setIsCustomMode(true); setCustomAmount(''); }} className="px-4 py-2 rounded-lg text-[10px] font-bold transition-all duration-200 min-h-[44px]" style={isCustomMode ? { backgroundColor: 'var(--color-text)', color: 'white' } : { backgroundColor: '#f3f4f6', color: '#6b7280' }}>Своя</button>
           </div>
         </div>
 
-        <button type="button" onClick={() => setConsentGiven(!consentGiven)} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left" style={consentGiven ? { border: '1.5px solid var(--color-primary)', backgroundColor: 'rgba(26, 157, 108, 0.05)' } : { border: '1.5px solid #e5e7eb' }}>
+        <button type="button" aria-label={consentGiven ? 'Согласие дано' : 'Дать согласие на обработку данных'} onClick={() => setConsentGiven(!consentGiven)} className="w-full flex items-center gap-3 p-3 rounded-xl transition-all duration-200 text-left min-h-[44px]" style={consentGiven ? { border: '1.5px solid var(--color-primary)', backgroundColor: 'rgba(26, 157, 108, 0.05)' } : { border: '1.5px solid #e5e7eb' }}>
           <div className="w-5 h-5 rounded-md shrink-0 flex items-center justify-center transition-all duration-200" style={consentGiven ? { backgroundColor: 'var(--color-primary)', border: '1.5px solid var(--color-primary)' } : { border: '1.5px solid #d1d5db' }}>
             {consentGiven && <CheckCircle size={12} className="text-white" />}
           </div>
-          <span className="text-xs font-medium" style={{ color: '#6b7280' }}>Согласие на обработку данных и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }} onClick={(e) => e.stopPropagation()}>условия оферты</Link></span>
+          <span className="text-xs font-medium" style={{ color: '#4b5563' }}>Согласие на обработку данных и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }} onClick={(e) => e.stopPropagation()}>условия оферты</Link></span>
         </button>
 
         {error && <div className="p-3 text-sm font-bold rounded-xl text-center" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{error}</div>}
 
-        <button onClick={handleDonateSubmit} disabled={isSubmitting} className="w-full h-11 text-white rounded-xl text-sm font-bold transition-all duration-200 disabled:opacity-50" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 14px rgba(26, 157, 108, 0.3)' }}>
+        <button aria-label="Поддержать мечеть" onClick={handleDonateSubmit} disabled={isSubmitting} className="w-full h-12 text-white rounded-xl text-sm font-bold transition-all duration-200 disabled:opacity-50 min-h-[48px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 14px rgba(26, 157, 108, 0.3)' }}>
           {isSubmitting ? 'Обработка...' : 'Поддержать мечеть'}
         </button>
       </div>

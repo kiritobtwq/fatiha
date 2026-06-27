@@ -117,6 +117,7 @@ export default function Header({ mosqueName }: HeaderProps) {
 
         <div className="flex items-center gap-3">
           <button
+            aria-label="Поддержать мечеть"
             onClick={handleSupportClick}
             className="hidden min-[920px]:flex btn-primary !py-2.5 !px-5 text-sm transition-all duration-300"
             style={{
@@ -129,6 +130,7 @@ export default function Header({ mosqueName }: HeaderProps) {
             Поддержать
           </button>
           <button
+            aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="min-[920px]:hidden p-2 rounded-lg transition-all duration-200"
             style={{ color: isWhite ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.8)' }}
@@ -172,7 +174,7 @@ export default function Header({ mosqueName }: HeaderProps) {
                 {item.label}
               </Link>
             ))}
-            <button onClick={handleSupportClick} className="btn-primary !py-3 !px-6 text-sm w-full mt-2">
+            <button aria-label="Поддержать мечеть" onClick={handleSupportClick} className="btn-primary !py-3 !px-6 text-sm w-full mt-2">
               <Heart size={15} className="fill-current" />
               Поддержать
             </button>
