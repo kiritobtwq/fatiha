@@ -398,12 +398,15 @@ export default function Home() {
   };
 
   const handlePhoneChange = (value: string) => {
-    let digits = value.replace(/\D/g, '');
-    if (digits.length === 0) {
+    const oldRaw = phone.replace(/\D/g, '');
+    const newRaw = value.replace(/\D/g, '');
+    if (newRaw === oldRaw) return;
+    if (newRaw.length === 0) {
       setPhone('+7');
       setPhoneError('');
       return;
     }
+    let digits = newRaw;
     if (digits[0] !== '7') digits = '7' + digits;
     digits = digits.substring(0, 11);
     setPhone(formatPhone(digits));
