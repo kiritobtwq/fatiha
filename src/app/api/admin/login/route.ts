@@ -52,7 +52,8 @@ export async function POST(request: Request) {
       expiresIn: '24h',
     });
 
-    cookies().set('admin_token', token, {
+    const cookieStore = await cookies();
+    cookieStore.set('admin_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       path: '/',

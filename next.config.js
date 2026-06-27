@@ -12,6 +12,21 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://yookassa.ru https://mc.yandex.ru https://www.googletagmanager.com",
+              "style-src 'self' 'unsafe-inline'",
+              "img-src 'self' data: blob: https://res.cloudinary.com https://mc.yandex.ru",
+              "connect-src 'self' https://api.yookassa.ru https://mc.yandex.ru https://www.google-analytics.com",
+              "font-src 'self' data:",
+              "frame-src 'self' https://yookassa.ru",
+              "object-src 'none'",
+              "base-uri 'none'",
+              "form-action 'self'",
+            ].join('; '),
+          },
         ],
       },
     ];
