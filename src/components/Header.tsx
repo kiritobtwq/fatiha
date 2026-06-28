@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Heart, Menu, X } from 'lucide-react';
 
@@ -68,12 +69,13 @@ export default function Header({ mosqueName }: HeaderProps) {
     >
       <div className="container mx-auto px-4 h-full flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          <div
-            className="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-xl text-white transition-all duration-300 group-hover:scale-105"
-            style={{ backgroundColor: isWhite ? 'var(--color-primary)' : 'rgba(255,255,255,0.15)' }}
-          >
-            {mosqueName[0]}
-          </div>
+          <Image
+            src="/logo-small.webp"
+            alt={mosqueName}
+            width={40}
+            height={40}
+            className="transition-all duration-300 group-hover:scale-105"
+          />
           <span
             className="font-bold text-xl md:text-2xl transition-colors duration-300"
             style={{
