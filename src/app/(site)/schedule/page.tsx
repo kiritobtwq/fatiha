@@ -35,7 +35,12 @@ export default function SchedulePage() {
   }, []);
 
   const getSchedule = (day: Date) => {
-    const found = schedules.find(s => format(new Date(s.date), 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd'));
+    const found = schedules.find(s => {
+      if (!s.date) return false;
+      try {
+        return format(new Date(s.date), 'yyyy-MM-dd') === format(day, 'yyyy-MM-dd');
+      } catch { return false; }
+    });
     return {
       fajr: found?.fajr || DEFAULT_TIMES.fajr,
       dhuhr: found?.dhuhr || DEFAULT_TIMES.dhuhr,

@@ -23,6 +23,7 @@ export function calculatePrayerTimes(date: Date) {
   const times = new AdhanTimes(BIRSK, date, params);
 
   return {
+    date: date.toISOString(),
     fajr: formatTime(times.fajr),
     dhuhr: formatTime(times.dhuhr),
     asr: formatTime(times.asr),
