@@ -4,6 +4,8 @@
 
 **Ссылка:** https://fatiha-mechet.vercel.app
 
+![Мечеть Фатиха](https://fatiha-mechet.vercel.app/og-image.png)
+
 ## Переменные окружения
 
 Смена переменных в Vercel

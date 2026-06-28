@@ -25,15 +25,17 @@ export const metadata: Metadata = {
   openGraph: {
     title: `Мечеть Фатиха — ${config.mosque.city}`,
     description: `Мечеть Фатиха в городе ${config.mosque.city} — место молитвы и знания. Помогите построить мечеть!`,
-    url: `https://alfatiha-birsk.ru`,
+    url: `https://fatiha-mechet.vercel.app`,
     siteName: 'Мечеть Фатиха',
     locale: 'ru_RU',
     type: 'website',
+    images: [{ url: '/og-image.png', width: 1280, height: 640 }],
   },
   twitter: {
     card: 'summary_large_image',
     title: `Мечеть Фатиха — ${config.mosque.city}`,
     description: `Сбор средств на реконструкцию мечети в г. ${config.mosque.city}`,
+    images: ['/og-image.png'],
   },
 };
 
