@@ -51,7 +51,7 @@ export default function SchedulePage() {
   };
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen py-12">
+    <div className="bg-[#F8FAFC] min-h-screen py-20">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-8">
           <h1 className="text-2xl md:text-3xl font-extrabold text-text-primary">Расписание намазов</h1>
