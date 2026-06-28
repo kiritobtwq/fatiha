@@ -524,7 +524,7 @@ export default function Home() {
         <div
           className="relative z-20 w-full container mx-auto px-4 md:px-8"
         >
-          <div className="flex flex-col lg:flex-row gap-12 items-center min-h-screen py-32">
+          <div className="flex flex-col lg:flex-row gap-12 items-center min-h-screen pt-32 md:pt-44 pb-32">
             {/* Left: Text content */}
             <div className="flex-1 text-center lg:text-left">
               <motion.div

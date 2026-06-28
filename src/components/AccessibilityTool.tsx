@@ -23,7 +23,7 @@ export default function AccessibilityTool() {
   };
 
   return (
-    <div className="fixed bottom-6 left-6 z-[300]">
+    <div className="fixed bottom-6 right-6 z-[300]">
       {/* Trigger Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}

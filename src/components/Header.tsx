@@ -64,7 +64,7 @@ export default function Header({ mosqueName }: HeaderProps) {
 
   return (
     <header
-      className="fixed top-0 left-0 right-0 h-[72px] z-[100]"
+      className="fixed top-0 left-0 right-0 h-20 z-[100]"
       style={{ ...headerStyle, transition: 'box-shadow 0.3s ease, border-color 0.3s ease' }}
     >
       <div className="container mx-auto px-4 h-full flex items-center justify-between">
