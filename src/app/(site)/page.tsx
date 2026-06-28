@@ -479,6 +479,25 @@ export default function Home() {
   const displayStats = mounted ? (stats || fallbackStats) : fallbackStats;
   const displaySchedule = schedule || fallbackSchedule;
 
+  const getPrayerState = (prayerName: string, prayerTime: string): 'passed' | 'next' | 'upcoming' => {
+    const now = new Date();
+    const [h, m] = prayerTime.split(':').map(Number);
+
+    if (prayerName === 'Джума') {
+      if (now.getDay() !== 5) return 'upcoming';
+      const jumaTime = new Date(now);
+      jumaTime.setHours(h, m, 0, 0);
+      return now > jumaTime ? 'passed' : 'upcoming';
+    }
+
+    const prayerDate = new Date(now);
+    prayerDate.setHours(h, m, 0, 0);
+
+    if (now > prayerDate) return 'passed';
+    if (nextPrayer?.name === prayerName) return 'next';
+    return 'upcoming';
+  };
+
   return (
     <div className="flex flex-col">
       {/* ═══════════════════════════════════════════════════════════════
@@ -839,23 +858,28 @@ export default function Home() {
               { name: 'Магриб', time: displaySchedule.maghrib, icon: '🌅' },
               { name: 'Иша', time: displaySchedule.isha, icon: '🌙' },
               { name: 'Джума', time: displaySchedule.juma, icon: '🕌' },
-            ].map((prayer, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 30 }}
-                animate={prayerInView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.1 * i }}
-                className={`p-4 md:p-5 rounded-2xl text-center transition-all duration-500 ${
-                  nextPrayer?.name === prayer.name
-                    ? 'bg-[var(--color-primary)] text-white shadow-glow animate-pulse-glow'
-                    : 'bg-white/5 text-white border border-white/5'
-                }`}
-              >
-                <div className="text-2xl mb-2">{prayer.icon}</div>
-                <div className="text-[9px] uppercase font-bold tracking-widest mb-1.5 text-white/40">{prayer.name}</div>
-                <div className="font-mono text-lg font-bold">{prayer.time}</div>
-              </motion.div>
-            ))}
+            ].map((prayer, i) => {
+              const state = getPrayerState(prayer.name, prayer.time);
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={prayerInView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.6, delay: 0.1 * i }}
+                  className={`p-4 md:p-5 rounded-2xl text-center transition-all duration-500 ${
+                    state === 'next'
+                      ? 'bg-[var(--color-primary)] text-white shadow-glow animate-pulse-glow'
+                      : state === 'passed'
+                      ? 'bg-white/5 text-white/40 border border-white/5'
+                      : 'bg-white/5 text-white border border-white/5'
+                  }`}
+                >
+                  <div className={`text-2xl mb-2 ${state === 'passed' ? 'opacity-40' : ''}`}>{prayer.icon}</div>
+                  <div className={`text-[9px] uppercase font-bold tracking-widest mb-1.5 ${state === 'passed' ? 'text-white/20' : 'text-white/40'}`}>{prayer.name}</div>
+                  <div className={`font-mono text-lg font-bold ${state === 'passed' ? 'text-white/30' : ''}`}>{prayer.time}</div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
