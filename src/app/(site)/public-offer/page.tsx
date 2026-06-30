@@ -83,7 +83,7 @@ export default function PublicOfferPage() {
             <p className="text-text-secondary leading-relaxed">
               Мечеть «Фатиха»<br />
               Адрес: {config.mosque.address}<br />
-              Email: {config.mosque.email || 'info@alfatiha-birsk.ru'}<br />
+              Email: {config.mosque.email}<br />
               Дата публикации: {new Date().toLocaleDateString('ru-RU')}
             </p>
           </section>

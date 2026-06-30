@@ -95,7 +95,7 @@ function ContactForm() {
                     </div>
                     <div>
                       <h4 className="font-bold text-text-primary mb-1">Email</h4>
-                      <p className="text-text-secondary">{config.mosque.email || 'info@alfatiha-birsk.ru'}</p>
+                      <p className="text-text-secondary">{config.mosque.email}</p>
                     </div>
                   </div>
 
@@ -105,7 +105,7 @@ function ContactForm() {
                     </div>
                     <div>
                       <h4 className="font-bold text-text-primary mb-1">Адрес</h4>
-                      <p className="text-text-secondary">{config.mosque.address || 'г. Бирск, ул. Примерная, 1'}</p>
+                      <p className="text-text-secondary">{config.mosque.address}</p>
                     </div>
                   </div>
                 </div>

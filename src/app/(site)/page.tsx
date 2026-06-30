@@ -555,7 +555,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="text-white/60 text-lg font-medium mb-8"
               >
-                {config.mosque.address || 'г. Бирск, ул. Мира, 1'}
+                {config.mosque.address}
               </motion.p>
 
               {/* Stats row */}
@@ -766,7 +766,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.3 }}
               style={{ color: 'var(--color-text-secondary)' }}
             >
-              Мечеть Фатиха в г. Бирске продолжает сбор средств на выкуп здания мечети, расположенной по адресу {config.mosque.address || 'ул. Мира, 1'}.
+              Мечеть Фатиха в г. Бирске продолжает сбор средств на выкуп здания мечети, расположенной по адресу {config.mosque.address}.
             </motion.p>
             
             <motion.p

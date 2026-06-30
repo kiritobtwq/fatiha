@@ -99,7 +99,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="font-display font-bold text-xl text-text-primary mb-4">9. Контакты</h2>
             <p className="text-text-secondary leading-relaxed">
-              По вопросам обработки персональных данных обращайтесь: {config.mosque.email || 'info@alfatiha-birsk.ru'}
+              По вопросам обработки персональных данных обращайтесь: {config.mosque.email}
             </p>
           </section>
 
