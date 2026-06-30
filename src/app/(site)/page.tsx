@@ -4,6 +4,7 @@ import { useEffect, useState, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { format } from 'date-fns';
+import { config } from '@/config';
 import { ru } from 'date-fns/locale';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import {
@@ -533,7 +534,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
                 <p className="text-white/80 text-xs font-bold uppercase tracking-[0.25em] mb-4">
-                  Сбор на реконструкцию
+                  Сбор на выкуп здания
                 </p>
               </motion.div>
 
@@ -554,7 +555,7 @@ export default function Home() {
                 transition={{ duration: 0.5, delay: 0.3 }}
                 className="text-white/60 text-lg font-medium mb-8"
               >
-                г. Бирск, ул. Мира, 1
+                {config.mosque.address || 'г. Бирск, ул. Мира, 1'}
               </motion.p>
 
               {/* Stats row */}
@@ -765,7 +766,7 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.3 }}
               style={{ color: 'var(--color-text-secondary)' }}
             >
-              Мечеть Фатиха в г. Бирске продолжает сбор средств для расширения и реконструкции мечети, расположенной по адресу, ул. Мира, 1.
+              Мечеть Фатиха в г. Бирске продолжает сбор средств на выкуп здания мечети, расположенной по адресу {config.mosque.address || 'ул. Мира, 1'}.
             </motion.p>
             
             <motion.p
@@ -1161,7 +1162,7 @@ export default function Home() {
           <div className="grid grid-cols-2 gap-6 md:gap-8 max-w-lg md:max-w-xl mx-auto">
             {[
               { name: 'имам-хатыб', image: '/media/Имам-Хатыб.webp' },
-              { name: 'имам-ахунд', image: '/media/Имам-Ахунд.webp' },
+              { name: 'имам-наиб', image: '/media/Имам-Наиб.webp' },
             ].map((member, i) => (
               <motion.div
                 key={i}

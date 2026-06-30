@@ -21,7 +21,7 @@ const jetbrains = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: `Мечеть Фатиха — ${config.mosque.city}`,
-  description: `Мечеть Фатиха в городе ${config.mosque.city} — место молитвы и знания. Сбор средств на реконструкцию мечети.`,
+  description: `Мечеть Фатиха в городе ${config.mosque.city} — место молитвы и знания. Сбор средств на выкуп здания мечети.`,
   openGraph: {
     title: `Мечеть Фатиха — ${config.mosque.city}`,
     description: `Мечеть Фатиха в городе ${config.mosque.city} — место молитвы и знания. Помогите построить мечеть!`,
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: `Мечеть Фатиха — ${config.mosque.city}`,
-    description: `Сбор средств на реконструкцию мечети в г. ${config.mosque.city}`,
+    description: `Сбор средств на выкуп здания мечети в г. ${config.mosque.city}`,
     images: ['/og-image.png'],
   },
   icons: {

@@ -121,14 +121,13 @@ function ContactForm() {
                 </div>
               </div>
 
-              <div className="card-container overflow-hidden">
+              <div className="card-container overflow-hidden" style={{ height: 300 }}>
                 <iframe
-                  src="https://yandex.ru/map-widget/v1/?text=Бирск%20мечеть&z=14"
+                  src={`https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(config.mosque.address || 'Бирск')}&z=14`}
                   width="100%"
-                  height="300"
+                  height="100%"
                   frameBorder="0"
                   allowFullScreen
-                  className="h-full"
                 />
               </div>
             </div>
