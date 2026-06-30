@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { config } from '@/config';
 
 export default function PublicOfferPage() {
   return (
@@ -17,7 +18,7 @@ export default function PublicOfferPage() {
           <section>
             <h2 className="font-display font-bold text-xl text-text-primary mb-4">1. Общие положения</h2>
             <p className="text-text-secondary leading-relaxed">
-              Настоящий документ является официальным предложением (публичной офертой) Мечети «Фатиха», расположенной по адресу: г. Бирск, ул. Пролетарская, 1 (далее — «Организация»), для совершения безвозмездного пожертвования (далее — «Пожертвование»).
+              Настоящий документ является официальным предложением (публичной офертой) Мечети «Фатиха», расположенной по адресу: {config.mosque.address} (далее — «Организация»), для совершения безвозмездного пожертвования (далее — «Пожертвование»).
             </p>
             <p className="text-text-secondary leading-relaxed mt-3">
               В соответствии с п. 3 ст. 437 ГК РФ, акцепт настоящей оферты означает полное и безоговорочное принятие всех условий настоящей Публичной оферты.
@@ -81,8 +82,8 @@ export default function PublicOfferPage() {
             <h2 className="font-display font-bold text-xl text-text-primary mb-4">8. Контакты</h2>
             <p className="text-text-secondary leading-relaxed">
               Мечеть «Фатиха»<br />
-              Адрес: г. Бирск, ул. Пролетарская, 1<br />
-              Email: info@alfatiha-birsk.ru<br />
+              Адрес: {config.mosque.address}<br />
+              Email: {config.mosque.email || 'info@alfatiha-birsk.ru'}<br />
               Дата публикации: {new Date().toLocaleDateString('ru-RU')}
             </p>
           </section>

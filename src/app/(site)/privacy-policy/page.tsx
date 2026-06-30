@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { config } from '@/config';
 
 export default function PrivacyPolicyPage() {
   return (
@@ -17,7 +18,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="font-display font-bold text-xl text-text-primary mb-4">1. Общие положения</h2>
             <p className="text-text-secondary leading-relaxed">
-              Настоящая Политика конфиденциальности (далее — «Политика») регулирует порядок обработки персональных данных пользователей сайта alfatiha-birsk.ru (далее — «Сайт»), принадлежащего Мечети «Фатиха», расположенной по адресу: г. Бирск, ул. Пролетарская, 1.
+              Настоящая Политика конфиденциальности (далее — «Политика») регулирует порядок обработки персональных данных пользователей сайта alfatiha-birsk.ru (далее — «Сайт»), принадлежащего Мечети «Фатиха», расположенной по адресу: {config.mosque.address}.
             </p>
             <p className="text-text-secondary leading-relaxed mt-3">
               Используя Сайт, вы подтверждаете своё согласие на обработку персональных данных в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».
@@ -98,7 +99,7 @@ export default function PrivacyPolicyPage() {
           <section>
             <h2 className="font-display font-bold text-xl text-text-primary mb-4">9. Контакты</h2>
             <p className="text-text-secondary leading-relaxed">
-              По вопросам обработки персональных данных обращайтесь: info@alfatiha-birsk.ru
+              По вопросам обработки персональных данных обращайтесь: {config.mosque.email || 'info@alfatiha-birsk.ru'}
             </p>
           </section>
 
