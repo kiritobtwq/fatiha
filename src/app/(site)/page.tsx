@@ -1072,10 +1072,10 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: 'Джаназа', desc: 'Похоронная молитва', topic: 'Джаназа (похоронная молитва)', icon: '🕌' },
               { title: 'Никях', desc: 'Исламский брак', topic: 'Никях (исламский брак)', icon: '💍' },
               { title: 'Консультация', desc: 'С имамом', topic: 'Консультация имама', icon: '📖' },
               { title: 'Хадж/Умра', desc: 'Паломничество', topic: 'Уроки для паломников', icon: '🕋' },
+              { title: 'Джаназа', desc: 'Похоронная молитва', topic: 'Джаназа (похоронная молитва)', icon: '🤲' },
             ].map((service, i) => (
               <motion.div
                 key={i}

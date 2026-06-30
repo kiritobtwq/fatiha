@@ -91,7 +91,7 @@ export default function SchedulePage() {
         <div className="mt-8 bg-white p-5 rounded-2xl shadow-sm flex items-start gap-4">
           <CalendarIcon size={20} className="text-primary shrink-0 mt-0.5" />
           <p className="text-text-secondary text-xs font-medium leading-relaxed">
-            Время намазов по умолчанию. Коллективные намазы начинаются через 15-20 мин после наступления времени. Джума — 13:00.
+            Время рассчитано для Бирска. Коллективные намазы начинаются через 15–20 мин после наступления времени. Джума — 13:00.
           </p>
         </div>
       </div>
