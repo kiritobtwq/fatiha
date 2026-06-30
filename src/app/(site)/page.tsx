@@ -662,6 +662,14 @@ export default function Home() {
                   <button aria-label={isAnonymous ? 'Отменить анонимность' : 'Пожертвовать анонимно'} onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-11 rounded-xl border text-xs font-bold transition-all duration-200`} style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
                 </div>
 
+                {isRecurring && (
+                  <div className="mb-4">
+                    <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
+                    <input type="tel" ref={phoneInputRef} value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+                    {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
+                  </div>
+                )}
+
                 <div className="mb-4">
                   <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Сумма (₽)</label>
                   <div className="flex gap-2 flex-wrap mb-2">
@@ -675,13 +683,6 @@ export default function Home() {
                   <div className="w-5 h-5 rounded-md shrink-0 flex items-center justify-center transition-all duration-200" style={consentGiven ? { backgroundColor: 'var(--color-primary)', border: '1.5px solid var(--color-primary)' } : { border: '1.5px solid #d1d5db' }}>{consentGiven && <CheckCircle size={12} className="text-white" />}</div>
                   <span className="text-xs font-medium" style={{ color: '#4b5563' }}>Согласие на обработку данных и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
                 </button>
-                {isRecurring && (
-                  <div className="mb-4">
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
-                    <input type="tel" ref={phoneInputRef} value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
-                    {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
-                  </div>
-                )}
                 {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
                 <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить'} onClick={handleDonateSubmit} className="w-full h-16 text-white rounded-2xl text-base font-bold transition-all duration-300 hover:shadow-lg min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
                   {isRecurring ? 'Оформить подписку' : 'Оплатить'}
@@ -721,6 +722,14 @@ export default function Home() {
             <button aria-label={isAnonymous ? 'Отменить анонимность' : 'Пожертвовать анонимно'} onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-11 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
           </div>
 
+          {isRecurring && (
+            <div className="mb-4">
+              <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
+              <input type="tel" value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-10 px-3 bg-white rounded-xl text-sm font-medium transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+              {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
+            </div>
+          )}
+
           <div className="mb-4">
             <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Сумма (₽)</label>
             <div className="flex gap-1.5 flex-wrap mb-2">
@@ -734,13 +743,6 @@ export default function Home() {
             <div className="w-5 h-5 rounded-md shrink-0 flex items-center justify-center transition-all duration-200" style={consentGiven ? { backgroundColor: 'var(--color-primary)', border: '1.5px solid var(--color-primary)' } : { border: '1.5px solid #d1d5db' }}>{consentGiven && <CheckCircle size={12} className="text-white" />}</div>
             <span className="text-xs font-medium" style={{ color: '#4b5563' }}>Согласие и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
           </button>
-          {isRecurring && (
-            <div className="mb-4">
-              <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
-              <input type="tel" value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-10 px-3 bg-white rounded-xl text-sm font-medium transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
-              {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
-            </div>
-          )}
           {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
           <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить'} onClick={handleDonateSubmit} className="w-full h-14 text-white rounded-2xl text-base font-bold transition-all duration-300 min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
             {isRecurring ? 'Оформить подписку' : 'Оплатить'}
