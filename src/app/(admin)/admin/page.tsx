@@ -191,7 +191,7 @@ export default function AdminDashboardPage() {
                   : 'text-slate-400'
               }`}
               >
-                <item.icon size={16} />
+                <item.icon size={16} className="shrink-0" />
                 {item.label}
               </button>
             ))}
@@ -237,7 +237,7 @@ export default function AdminDashboardPage() {
                         : 'text-slate-500 hover:bg-slate-50 hover:text-slate-700'
                     }`}
                   >
-                    <item.icon size={18} />
+                    <item.icon size={18} className="shrink-0" />
                     {item.label}
                   </button>
                 ))}
