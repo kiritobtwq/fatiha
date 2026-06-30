@@ -104,7 +104,7 @@ export default function Header({ mosqueName }: HeaderProps) {
             <Link
               key={item.href}
               href={item.href}
-              className="px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200"
+              className="px-3 py-2 text-sm font-semibold rounded-lg transition-all duration-200 whitespace-nowrap"
               style={{
                 color: isWhite ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.7)',
               }}
@@ -173,7 +173,7 @@ export default function Header({ mosqueName }: HeaderProps) {
                 key={item.href}
                 href={item.href}
                 onClick={closeMenu}
-                className="px-4 py-3 text-sm font-semibold rounded-xl transition-colors duration-200"
+                className="px-4 py-3 text-sm font-semibold rounded-xl transition-colors duration-200 whitespace-nowrap"
                 style={{ color: isWhite ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.9)' }}
                 onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-primary)'; e.currentTarget.style.backgroundColor = isWhite ? 'var(--color-primary-light)' : 'rgba(255,255,255,0.1)'; }}
                 onMouseLeave={(e) => { e.currentTarget.style.color = isWhite ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.9)'; e.currentTarget.style.backgroundColor = 'transparent'; }}
