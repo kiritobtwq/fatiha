@@ -482,7 +482,9 @@ export default function Home() {
 
   const getPrayerState = (prayerName: string, prayerTime: string): 'passed' | 'next' | 'upcoming' => {
     const now = new Date();
+    if (!prayerTime) return 'upcoming';
     const [h, m] = prayerTime.split(':').map(Number);
+    if (isNaN(h) || isNaN(m)) return 'upcoming';
 
     if (prayerName === 'Джума') {
       if (now.getDay() !== 5) return 'upcoming';
@@ -630,8 +632,8 @@ export default function Home() {
                 <h2 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
 
                 <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
-                  <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
-                  <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
+                  <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={!isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Единоразово</button>
+                  <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Регулярно</button>
                 </div>
 
                 <div className="space-y-3 mb-4">
@@ -689,10 +691,10 @@ export default function Home() {
         <div id="donation-widget" className="bg-white rounded-3xl p-6 shadow-xl" style={{ boxShadow: '0 15px 40px rgba(0, 0, 0, 0.1)' }}>
           <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
 
-          <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
-            <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${!isRecurring ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-400'}`}>Единоразово</button>
-            <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className={`flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200 ${isRecurring ? 'text-white shadow-sm' : 'text-gray-400'}`} style={isRecurring ? { backgroundColor: 'var(--color-primary)' } : {}}>Регулярно</button>
-          </div>
+            <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
+              <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={!isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Единоразово</button>
+              <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Регулярно</button>
+            </div>
 
           <div className="space-y-3 mb-4">
             <input type="text" placeholder="Ваше имя" disabled={isAnonymous} className="w-full h-10 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200 disabled:opacity-50" style={{ border: '1.5px solid #e5e7eb', color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-primary)'; }} onBlur={(e) => { e.currentTarget.style.borderColor = '#e5e7eb'; }} />

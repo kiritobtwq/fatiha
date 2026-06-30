@@ -90,51 +90,32 @@ export default function AccessibilityTool() {
       )}
 
       <style jsx global>{`
-        .high-contrast {
-          filter: contrast(1.3) saturate(1.3);
-        }
         .high-contrast body {
           background-color: #fff !important;
           color: #000 !important;
         }
-        .high-contrast .card-container, 
-        .high-contrast .bg-white,
         .high-contrast section {
+          background-color: #fff !important;
           border: 2px solid #000 !important;
         }
-        .high-contrast p, 
-        .high-contrast span, 
-        .high-contrast div {
-          color: #000 !important;
-        }
-        .high-contrast .text-white {
-          color: #fff !important;
-        }
-        .high-contrast .text-white\/70,
-        .high-contrast .text-white\/80,
-        .high-contrast .text-white\/50,
-        .high-contrast .text-white\/60 {
-          color: #fff !important;
-        }
-        .high-contrast .btn-primary {
-          background-color: #000 !important;
-          color: #fff !important;
+        .high-contrast .card-container,
+        .high-contrast .bg-white {
+          background-color: #fff !important;
           border: 2px solid #000 !important;
         }
         .high-contrast a {
           color: #000 !important;
           text-decoration: underline !important;
         }
-        .high-contrast img {
-          filter: contrast(1.1) !important;
-        }
-        .high-contrast .bg-\\[\\#2ECC8E\\] {
-          background-color: #000 !important;
-          color: #fff !important;
-        }
-        .high-contrast input, .high-contrast textarea {
+        .high-contrast input,
+        .high-contrast textarea,
+        .high-contrast select {
           border: 2px solid #000 !important;
           background-color: #fff !important;
+          color: #000 !important;
+        }
+        .high-contrast .text-white,
+        .high-contrast [class*="text-white"] {
           color: #000 !important;
         }
       `}</style>
