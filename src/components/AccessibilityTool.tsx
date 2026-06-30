@@ -51,8 +51,8 @@ export default function AccessibilityTool() {
             </div>
             <button
               onClick={() => setIsLargeFont(!isLargeFont)}
-              className="w-11 h-6 rounded-full transition-colors relative duration-200"
-              style={{ backgroundColor: isLargeFont ? 'var(--color-primary)' : '#e5e7eb' }}
+              className="rounded-full transition-colors relative duration-200"
+              style={{ backgroundColor: isLargeFont ? 'var(--color-primary)' : '#e5e7eb', width: 44, height: 24 }}
             >
               <div
                 className="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
