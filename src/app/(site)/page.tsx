@@ -119,6 +119,8 @@ export default function Home() {
   const [isRecurring, setIsRecurring] = useState(false);
   const [phone, setPhone] = useState('+7');
   const [phoneError, setPhoneError] = useState('');
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
 
   const [currentSlide, setCurrentSlide] = useState(0);
   const [galleryPhotos, setGalleryPhotos] = useState<{ src: string; alt: string }[]>([]);
@@ -449,6 +451,12 @@ export default function Home() {
       return;
     }
 
+    if (isRecurring && !confirmed) {
+      setShowConfirm(true);
+      return;
+    }
+
+    setShowConfirm(false);
     setWidgetError('');
     setIsSubmitting(true);
 
@@ -474,6 +482,7 @@ export default function Home() {
       setWidgetError('Проверьте подключение к интернету');
     } finally {
       setIsSubmitting(false);
+      setConfirmed(false);
     }
   };
 
@@ -482,23 +491,34 @@ export default function Home() {
 
   const getPrayerState = (prayerName: string, prayerTime: string): 'passed' | 'next' | 'upcoming' => {
     const now = new Date();
-    if (!prayerTime) return 'upcoming';
+    if (!prayerTime) {
+      console.log('getPrayerState: no time', { prayerName, prayerTime });
+      return 'upcoming';
+    }
     const [h, m] = prayerTime.split(':').map(Number);
-    if (isNaN(h) || isNaN(m)) return 'upcoming';
+    if (isNaN(h) || isNaN(m)) {
+      console.log('getPrayerState: invalid h/m', { prayerName, prayerTime, h, m });
+      return 'upcoming';
+    }
 
     if (prayerName === 'Джума') {
       if (now.getDay() !== 5) return 'upcoming';
       const jumaTime = new Date(now);
       jumaTime.setHours(h, m, 0, 0);
-      return now > jumaTime ? 'passed' : 'upcoming';
+      const result = now > jumaTime ? 'passed' : 'upcoming';
+      console.log('getPrayerState', { prayerName, prayerTime, h, m, prayerDate: jumaTime.toISOString(), now: now.toISOString(), result });
+      return result;
     }
 
     const prayerDate = new Date(now);
     prayerDate.setHours(h, m, 0, 0);
 
-    if (now > prayerDate) return 'passed';
-    if (nextPrayer?.name === prayerName) return 'next';
-    return 'upcoming';
+    let result: 'passed' | 'next' | 'upcoming';
+    if (now > prayerDate) result = 'passed';
+    else if (nextPrayer?.name === prayerName) result = 'next';
+    else result = 'upcoming';
+    console.log('getPrayerState', { prayerName, prayerTime, h, m, prayerDate: prayerDate.toISOString(), now: now.toISOString(), nextPrayer: nextPrayer?.name, result });
+    return result;
   };
 
   return (
@@ -641,13 +661,11 @@ export default function Home() {
                   <button aria-label={isAnonymous ? 'Отменить анонимность' : 'Пожертвовать анонимно'} onClick={() => setIsAnonymous(!isAnonymous)} className={`w-full h-11 rounded-xl border text-xs font-bold transition-all duration-200`} style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
                 </div>
 
-                {isRecurring && (
-                  <div className="mb-4">
-                    <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
-                    <input type="tel" ref={phoneInputRef} value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
-                    {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
-                  </div>
-                )}
+                <div className="mb-4" style={{ visibility: isRecurring ? 'visible' : 'hidden' }}>
+                  <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
+                  <input type="tel" ref={phoneInputRef} value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-11 px-4 bg-white rounded-xl font-medium text-sm transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
+                  {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
+                </div>
 
                 <div className="mb-4">
                   <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Сумма (₽)</label>
@@ -701,13 +719,11 @@ export default function Home() {
             <button aria-label={isAnonymous ? 'Отменить анонимность' : 'Пожертвовать анонимно'} onClick={() => setIsAnonymous(!isAnonymous)} className="w-full h-11 rounded-lg border text-xs font-bold transition-all duration-200" style={isAnonymous ? { backgroundColor: 'var(--color-primary)', borderColor: 'var(--color-primary)', color: 'white' } : { borderColor: '#e5e7eb', color: '#9ca3af' }}>{isAnonymous ? '✓ Анонимно' : 'Анонимно'}</button>
           </div>
 
-          {isRecurring && (
-            <div className="mb-4">
+            <div className="mb-4" style={{ visibility: isRecurring ? 'visible' : 'hidden' }}>
               <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Телефон <span className="text-red-400">*</span></label>
               <input type="tel" value={phone} onKeyDown={handlePhoneKeyDown} onChange={(e) => handlePhoneChange(e.target.value)} placeholder="+7 (___) ___-__-__" className="w-full h-10 px-3 bg-white rounded-xl text-sm font-medium transition-all duration-200" style={{ border: `1.5px solid ${phoneError ? '#dc2626' : '#e5e7eb'}`, color: 'var(--color-text)' }} onFocus={(e) => { e.currentTarget.style.borderColor = phoneError ? '#dc2626' : 'var(--color-primary)'; }} onBlur={(e) => { if (!phoneError) e.currentTarget.style.borderColor = '#e5e7eb'; }} />
               {phoneError && <p className="text-xs font-bold mt-1" style={{ color: '#dc2626' }}>{phoneError}</p>}
             </div>
-          )}
 
           <div className="mb-4">
             <label className="block text-xs font-bold mb-1.5" style={{ color: '#9ca3af' }}>Сумма (₽)</label>
@@ -1249,6 +1265,37 @@ export default function Home() {
             </div>
           </div>
         </section>
+      )}
+
+      {/* Confirmation modal */}
+      {showConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
+          <div className="bg-white rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+            <h3 className="text-lg font-bold mb-3" style={{ fontFamily: 'var(--font-playfair)' }}>Подтверждение подписки</h3>
+            <p className="text-sm mb-2" style={{ color: '#4b5563' }}>
+              Вы собираетесь оформить ежемесячное регулярное пожертвование
+            </p>
+            <p className="text-2xl font-bold mb-4" style={{ color: 'var(--color-primary)' }}>
+              {new Intl.NumberFormat('ru-RU').format(parseFloat(donateAmount) || 0)} ₽/мес
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowConfirm(false)}
+                className="flex-1 py-3 rounded-xl text-sm font-bold transition-all duration-200"
+                style={{ border: '1.5px solid #d1d5db', color: '#6b7280' }}
+              >
+                Отмена
+              </button>
+              <button
+                onClick={() => { setConfirmed(true); setShowConfirm(false); }}
+                className="flex-1 py-3 rounded-xl text-sm font-bold text-white transition-all duration-200"
+                style={{ backgroundColor: 'var(--color-primary)' }}
+              >
+                Подтвердить
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
