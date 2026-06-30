@@ -27,11 +27,12 @@ export default function SchedulePage() {
   const days = [new Date(), addDays(new Date(), 1), addDays(new Date(), 2)];
 
   useEffect(() => {
-    fetch('/api/schedule')
-      .then(res => res.json())
-      .then(data => {
-        if (data && !data.error) setSchedules([data]);
-      });
+    Promise.all(days.map(day =>
+      fetch(`/api/schedule?date=${format(day, 'yyyy-MM-dd')}`)
+        .then(res => res.json())
+    )).then(results => {
+      setSchedules(results.filter(r => r && !r.error));
+    });
   }, []);
 
   const getSchedule = (day: Date) => {

@@ -199,6 +199,7 @@ export default function LessonsManagement({ lessons, setLessons, loadData }: Pro
                 <label className="block text-sm font-bold text-slate-700 mb-2">Начало</label>
                 <input
                   type="time"
+                  step="60"
                   value={formData.startTime}
                   onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary"
@@ -209,6 +210,7 @@ export default function LessonsManagement({ lessons, setLessons, loadData }: Pro
                 <label className="block text-sm font-bold text-slate-700 mb-2">Окончание</label>
                 <input
                   type="time"
+                  step="60"
                   value={formData.endTime}
                   onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
                   className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-primary"

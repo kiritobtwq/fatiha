@@ -47,7 +47,7 @@ export default function EducationPage() {
             Обучение
           </h1>
           <p className="text-text-secondary text-xl font-medium">
-            Уроки для детей и взрослых — от начального до продвинутого уровня
+            Уроки для детей и взрослых
           </p>
         </div>
 
