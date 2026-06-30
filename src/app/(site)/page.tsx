@@ -661,8 +661,8 @@ export default function Home() {
                   <span className="text-xs font-medium" style={{ color: '#4b5563' }}>Согласие на обработку данных и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
                 </button>
                 {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
-                <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'} onClick={handleDonateSubmit} className="w-full h-16 text-white rounded-2xl text-base font-bold transition-all duration-300 hover:shadow-lg min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
-                  {isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'}
+                <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить'} onClick={handleDonateSubmit} className="w-full h-16 text-white rounded-2xl text-base font-bold transition-all duration-300 hover:shadow-lg min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
+                  {isRecurring ? 'Оформить подписку' : 'Оплатить'}
                 </button>
               </div>
             </motion.div>
@@ -721,8 +721,8 @@ export default function Home() {
             <span className="text-xs font-medium" style={{ color: '#4b5563' }}>Согласие и <Link href="/public-offer" className="font-bold hover:underline" style={{ color: 'var(--color-primary)' }}>условия оферты</Link></span>
           </button>
           {widgetError && <div className="p-3 text-sm font-bold rounded-xl text-center mb-4" style={{ backgroundColor: '#fef2f2', color: '#dc2626' }}>{widgetError}</div>}
-          <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'} onClick={handleDonateSubmit} className="w-full h-14 text-white rounded-2xl text-base font-bold transition-all duration-300 min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
-            {isRecurring ? 'Оформить подписку' : 'Оплатить через ЮKassa'}
+          <button aria-label={isRecurring ? 'Оформить подписку' : 'Оплатить'} onClick={handleDonateSubmit} className="w-full h-14 text-white rounded-2xl text-base font-bold transition-all duration-300 min-h-[56px]" style={{ backgroundColor: 'var(--color-primary)', boxShadow: '0 4px 20px rgba(13, 124, 95, 0.3)' }}>
+            {isRecurring ? 'Оформить подписку' : 'Оплатить'}
           </button>
           </div>
       </section>

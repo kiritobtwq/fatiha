@@ -56,7 +56,7 @@ export default function AccessibilityTool() {
             >
               <div
                 className="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
-                style={{ transform: isLargeFont ? 'translateX(20px)' : 'translateX(4px)' }}
+                style={{ transform: isLargeFont ? 'translateX(24px)' : 'translateX(4px)' }}
               />
             </button>
           </div>
@@ -73,7 +73,7 @@ export default function AccessibilityTool() {
             >
               <div
                 className="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
-                style={{ transform: isHighContrast ? 'translateX(20px)' : 'translateX(4px)' }}
+                style={{ transform: isHighContrast ? 'translateX(24px)' : 'translateX(4px)' }}
               />
             </button>
           </div>

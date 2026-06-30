@@ -171,6 +171,7 @@ img {
 
   .btn-primary:hover {
     background-color: var(--color-primary-dark);
+    color: white;
     transform: translateY(-2px);
     box-shadow: 0 8px 30px rgba(13, 124, 95, 0.4);
   }

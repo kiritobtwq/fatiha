@@ -88,21 +88,6 @@ export default function SupportersPage() {
             </div>
           )}
 
-          <div className="card-container bg-bg-accent border-none p-8 md:p-12 rounded-3xl mb-16">
-            <div className="flex flex-col md:flex-row justify-between items-center gap-8 text-center md:text-left">
-              <div>
-                <h3 className="font-display font-bold text-2xl text-text-primary mb-2">
-                  Станьте постоянным помощником
-                </h3>
-                <p className="text-text-secondary text-lg">
-                  Небольшой регулярный вклад важнее редкого большого
-                </p>
-              </div>
-              <Link href="/#donation-widget" className="btn-primary text-lg">
-                Подключить подписку <ArrowRight className="ml-2" size={20} />
-              </Link>
-            </div>
-          </div>
 
           <div className="card-container overflow-hidden">
             <div className="p-8 border-b border-border bg-bg">
