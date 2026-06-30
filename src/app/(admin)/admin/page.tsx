@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   LayoutDashboard,
-  Heart,
+  Wallet,
   Calendar,
   BookOpen,
   Briefcase,
@@ -165,7 +165,7 @@ export default function AdminDashboardPage() {
 
   const menuItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Дашборд' },
-    { id: 'donations', icon: Heart, label: 'Пожертвования' },
+    { id: 'donations', icon: Wallet, label: 'Пожертвования' },
     { id: 'schedule', icon: Calendar, label: 'Расписание намазов' },
     { id: 'education', icon: BookOpen, label: 'Расписание уроков' },
     { id: 'services', icon: Briefcase, label: 'Услуги' },
