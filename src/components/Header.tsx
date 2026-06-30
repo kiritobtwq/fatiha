@@ -92,7 +92,7 @@ export default function Header({ mosqueName }: HeaderProps) {
           </span>
         </Link>
 
-        <nav className="hidden min-[920px]:flex items-center gap-1 ml-auto mr-4">
+        <nav className="hidden min-[1000px]:flex items-center gap-1 ml-auto mr-4">
           {[
             { href: '/about', label: 'О нас' },
             { href: '/help', label: 'Чем поможем' },
@@ -126,7 +126,7 @@ export default function Header({ mosqueName }: HeaderProps) {
           <button
             aria-label="Поддержать мечеть"
             onClick={handleSupportClick}
-            className="hidden min-[920px]:flex btn-primary !py-2.5 !px-5 text-sm transition-all duration-300"
+            className="hidden min-[1000px]:flex btn-primary !py-2.5 !px-5 text-sm transition-all duration-300"
             style={{
               backgroundColor: isWhite ? 'var(--color-primary)' : 'rgba(255,255,255,0.15)',
               border: isWhite ? 'none' : '1px solid rgba(255,255,255,0.2)',
@@ -139,7 +139,7 @@ export default function Header({ mosqueName }: HeaderProps) {
           <button
             aria-label={isMobileMenuOpen ? 'Закрыть меню' : 'Открыть меню'}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="min-[920px]:hidden p-2 rounded-lg transition-all duration-200"
+            className="min-[1000px]:hidden p-2 rounded-lg transition-all duration-200"
             style={{ color: isWhite ? 'var(--color-text-secondary)' : 'rgba(255,255,255,0.8)' }}
             onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = isWhite ? 'var(--color-primary-light)' : 'rgba(255,255,255,0.1)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
@@ -151,7 +151,7 @@ export default function Header({ mosqueName }: HeaderProps) {
 
       {isMobileMenuOpen && (
         <div
-          className="min-[920px]:hidden absolute top-full left-0 right-0"
+          className="min-[1000px]:hidden absolute top-full left-0 right-0"
           style={{
             backgroundColor: isWhite ? 'rgba(255, 255, 255, 0.98)' : 'rgba(0, 0, 0, 0.6)',
             backdropFilter: 'blur(20px)',
