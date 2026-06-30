@@ -67,7 +67,7 @@ export default function Header({ mosqueName }: HeaderProps) {
       className="fixed top-0 left-0 right-0 h-20 z-[100]"
       style={{ ...headerStyle, transition: 'box-shadow 0.3s ease, border-color 0.3s ease' }}
     >
-      <div className="container mx-auto px-4 h-full flex items-center justify-between">
+      <div className="container mx-auto px-4 h-full flex items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
           <div
             className="w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105"

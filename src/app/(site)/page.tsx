@@ -631,7 +631,7 @@ export default function Home() {
               <div className="bg-white rounded-3xl p-6 shadow-2xl" style={{ boxShadow: '0 30px 80px rgba(0, 0, 0, 0.3)' }}>
                 <h2 className="text-xl font-bold mb-5" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
 
-                <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
+                <div className="flex p-1 gap-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
                   <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={!isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Единоразово</button>
                   <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Регулярно</button>
                 </div>
@@ -691,7 +691,7 @@ export default function Home() {
         <div id="donation-widget" className="bg-white rounded-3xl p-6 shadow-xl" style={{ boxShadow: '0 15px 40px rgba(0, 0, 0, 0.1)' }}>
           <h2 className="text-lg font-bold mb-4" style={{ color: 'var(--color-text)', fontFamily: 'var(--font-playfair)' }}>Помочь сейчас</h2>
 
-            <div className="flex p-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
+            <div className="flex p-1 gap-1 rounded-xl mb-4" style={{ backgroundColor: '#f3f4f6' }}>
               <button aria-label="Единоразовое пожертвование" onClick={() => setIsRecurring(false)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={!isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Единоразово</button>
               <button aria-label="Регулярное пожертвование" onClick={() => setIsRecurring(true)} className="flex-1 py-2.5 rounded-lg text-xs font-bold transition-all duration-200" style={isRecurring ? { backgroundColor: 'var(--color-primary)', color: 'white', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' } : { border: '1.5px solid #d1d5db', color: '#9ca3af' }}>Регулярно</button>
             </div>

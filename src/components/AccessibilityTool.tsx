@@ -1,25 +1,18 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Eye, Type, Contrast, RotateCcw, X } from 'lucide-react';
+import { Eye, Type, RotateCcw, X } from 'lucide-react';
 
 export default function AccessibilityTool() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLargeFont, setIsLargeFont] = useState(false);
-  const [isHighContrast, setIsHighContrast] = useState(false);
 
   useEffect(() => {
     document.documentElement.style.fontSize = isLargeFont ? '130%' : '100%';
-    if (isHighContrast) {
-      document.documentElement.classList.add('high-contrast');
-    } else {
-      document.documentElement.classList.remove('high-contrast');
-    }
-  }, [isLargeFont, isHighContrast]);
+  }, [isLargeFont]);
 
   const reset = () => {
     setIsLargeFont(false);
-    setIsHighContrast(false);
   };
 
   return (
@@ -61,23 +54,6 @@ export default function AccessibilityTool() {
             </button>
           </div>
 
-          {/* High Contrast */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-medium" style={{ color: 'var(--color-text-secondary)' }}>
-              <Contrast size={16} /> Высокий контраст
-            </div>
-            <button
-              onClick={() => setIsHighContrast(!isHighContrast)}
-              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-colors"
-              style={{
-                backgroundColor: isHighContrast ? 'var(--color-primary)' : '#e5e7eb',
-                color: isHighContrast ? 'white' : '#374151',
-              }}
-            >
-              {isHighContrast ? 'Вкл' : 'Выкл'}
-            </button>
-          </div>
-
           {/* Reset */}
           <button
             onClick={reset}
@@ -89,36 +65,7 @@ export default function AccessibilityTool() {
         </div>
       )}
 
-      <style jsx global>{`
-        .high-contrast body {
-          background-color: #fff !important;
-          color: #000 !important;
-        }
-        .high-contrast section {
-          background-color: #fff !important;
-          border: 2px solid #000 !important;
-        }
-        .high-contrast .card-container,
-        .high-contrast .bg-white {
-          background-color: #fff !important;
-          border: 2px solid #000 !important;
-        }
-        .high-contrast a {
-          color: #000 !important;
-          text-decoration: underline !important;
-        }
-        .high-contrast input,
-        .high-contrast textarea,
-        .high-contrast select {
-          border: 2px solid #000 !important;
-          background-color: #fff !important;
-          color: #000 !important;
-        }
-        .high-contrast .text-white,
-        .high-contrast [class*="text-white"] {
-          color: #000 !important;
-        }
-      `}</style>
+
     </div>
   );
 }
