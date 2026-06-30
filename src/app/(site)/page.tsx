@@ -736,7 +736,7 @@ export default function Home() {
           <Image src="/media/Имам-Хатыб-Photoroom.webp" alt="" width={512} height={512} className="w-full h-auto object-contain" />
         </div>
         <div className="hidden min-[1800px]:block absolute right-12 top-20 w-80 pointer-events-none">
-          <Image src="/media/Имам-Ахунд-Photoroom.webp" alt="" width={512} height={512} className="w-full h-auto object-contain" />
+          <Image src="/media/Имам-Наиб-Photoroom.webp" alt="" width={512} height={512} className="w-full h-auto object-contain" />
         </div>
         <div className="container mx-auto px-4 max-w-4xl relative z-10">
           <motion.div

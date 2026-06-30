@@ -121,13 +121,20 @@ function ContactForm() {
                 </div>
               </div>
 
-              <div className="card-container overflow-hidden" style={{ height: 300 }}>
+              <div className="card-container overflow-hidden" style={{ position: 'relative', overflow: 'hidden', height: 400 }}>
+                <a href="https://yandex.ru/maps/20689/birsk/?utm_medium=mapframe&utm_source=maps" style={{ color: '#eee', fontSize: 12, position: 'absolute', top: 0, zIndex: 1 }}>
+                  Бирск
+                </a>
+                <a href="https://yandex.ru/maps/20689/birsk/house/kommunisticheskaya_ulitsa_25/YUwYcwVnTE0GQFtvfXhwdnRqYA==/?ll=55.527581%2C55.417894&utm_medium=mapframe&utm_source=maps&z=17.1" style={{ color: '#eee', fontSize: 12, position: 'absolute', top: 14, zIndex: 1 }}>
+                  Коммунистическая улица, 25 — Яндекс Карты
+                </a>
                 <iframe
-                  src={`https://yandex.ru/map-widget/v1/?text=${encodeURIComponent(config.mosque.address || 'Бирск')}&z=14`}
+                  src="https://yandex.ru/map-widget/v1/?ll=55.527581%2C55.417894&mode=search&ol=geo&ouri=ymapsbm1%3A%2F%2Fgeo%3Fdata%3DCgoxNTM3Nzk3MTUxEnjQoNC-0YHRgdC40Y8sINCg0LXRgdC_0YPQsdC70LjQutCwINCR0LDRiNC60L7RgNGC0L7RgdGC0LDQvSwg0JHQuNGA0YHQuiwg0JrQvtC80LzRg9C90LjRgdGC0LjRh9C10YHQutCw0Y8g0YPQu9C40YbQsCwgMjUiCg09HF5CFeyrXUI%2C&z=17.1"
                   width="100%"
-                  height="100%"
-                  frameBorder="0"
+                  height="400"
+                  frameBorder="1"
                   allowFullScreen
+                  style={{ position: 'relative' }}
                 />
               </div>
             </div>
