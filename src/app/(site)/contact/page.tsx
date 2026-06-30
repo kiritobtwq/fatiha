@@ -2,7 +2,7 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Phone, Mail, MapPin, MessageSquare, CheckCircle, ChevronDown } from 'lucide-react';
+import { Mail, MapPin, MessageSquare, CheckCircle, ChevronDown } from 'lucide-react';
 import { config } from '@/config';
 
 const TOPICS = [
@@ -89,16 +89,6 @@ function ContactForm() {
                 </h3>
 
                 <div className="space-y-6">
-                  <div className="flex gap-4">
-                    <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary shrink-0">
-                      <Phone size={24} />
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-text-primary mb-1">Телефон</h4>
-                      <p className="text-text-secondary">{config.mosque.phone || '+7 (3477) 00-00-00'}</p>
-                    </div>
-                  </div>
-
                   <div className="flex gap-4">
                     <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary shrink-0">
                       <Mail size={24} />

@@ -72,10 +72,6 @@ export default function Footer() {
                 <p className="text-sm font-medium text-white/70">{config.mosque.address}</p>
               </div>
               <div className="flex flex-col">
-                <span className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/30">Телефон</span>
-                <p className="text-sm font-medium text-white/70">{config.mosque.phone}</p>
-              </div>
-              <div className="flex flex-col">
                 <span className="text-[10px] font-bold uppercase tracking-widest mb-1 text-white/30">Email</span>
                 <p className="text-sm font-medium text-white/70">{config.mosque.email}</p>
               </div>
