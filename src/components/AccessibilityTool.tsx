@@ -51,13 +51,13 @@ export default function AccessibilityTool() {
             </div>
             <button
               onClick={() => setIsLargeFont(!isLargeFont)}
-              className="rounded-full transition-colors relative duration-200"
-              style={{ backgroundColor: isLargeFont ? 'var(--color-primary)' : '#e5e7eb', width: 44, height: 24 }}
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-colors"
+              style={{
+                backgroundColor: isLargeFont ? 'var(--color-primary)' : '#e5e7eb',
+                color: isLargeFont ? 'white' : '#374151',
+              }}
             >
-              <div
-                className="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
-                style={{ transform: isLargeFont ? 'translateX(24px)' : 'translateX(4px)' }}
-              />
+              {isLargeFont ? 'Вкл' : 'Выкл'}
             </button>
           </div>
 
@@ -68,13 +68,13 @@ export default function AccessibilityTool() {
             </div>
             <button
               onClick={() => setIsHighContrast(!isHighContrast)}
-              className="w-11 h-6 rounded-full transition-colors relative duration-200"
-              style={{ backgroundColor: isHighContrast ? 'var(--color-primary)' : '#e5e7eb' }}
+              className="px-3 py-1.5 text-xs font-bold rounded-lg transition-colors"
+              style={{
+                backgroundColor: isHighContrast ? 'var(--color-primary)' : '#e5e7eb',
+                color: isHighContrast ? 'white' : '#374151',
+              }}
             >
-              <div
-                className="absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200"
-                style={{ transform: isHighContrast ? 'translateX(24px)' : 'translateX(4px)' }}
-              />
+              {isHighContrast ? 'Вкл' : 'Выкл'}
             </button>
           </div>
 

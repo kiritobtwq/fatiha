@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Nunito, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { config } from "@/config";
+import { prisma } from "@/lib/prisma";
 
 const playfair = Playfair_Display({
   subsets: ["latin", "cyrillic"],
@@ -44,15 +45,33 @@ export const metadata: Metadata = {
   manifest: '/site.webmanifest',
 };
 
-export default function RootLayout({
+async function getAnalyticsIds() {
+  try {
+    const records = await prisma.content.findMany({
+      where: { key: { in: ['yandex_metrika_id', 'google_analytics_id'] } },
+    });
+    const map: Record<string, string> = {};
+    records.forEach(r => { map[r.key] = r.value; });
+    return {
+      yandexMetrikaId: map.yandex_metrika_id || '',
+      googleAnalyticsId: map.google_analytics_id || '',
+    };
+  } catch {
+    return { yandexMetrikaId: '', googleAnalyticsId: '' };
+  }
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { yandexMetrikaId, googleAnalyticsId } = await getAnalyticsIds();
+
   return (
     <html lang="ru">
       <head>
-        {process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID && (
+        {yandexMetrikaId && (
           <script
             dangerouslySetInnerHTML={{
               __html: `
@@ -61,7 +80,7 @@ export default function RootLayout({
                 for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
                 k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
                 (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-                ym(${process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID}, "init", {
+                ym(${yandexMetrikaId}, "init", {
                   defer: true,
                   clickmap: true,
                   trackLinks: true,
@@ -72,12 +91,12 @@ export default function RootLayout({
             }}
           />
         )}
-        {process.env.NEXT_PUBLIC_GA_ID && (
+        {googleAnalyticsId && (
           <>
-            <script async src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}></script>
+            <script async src={`https://www.googletagmanager.com/gtag/js?id=${googleAnalyticsId}`}></script>
             <script
               dangerouslySetInnerHTML={{
-                __html: `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}');`,
+                __html: `window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${googleAnalyticsId}');`,
               }}
             />
           </>
